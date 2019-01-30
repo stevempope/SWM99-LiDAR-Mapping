@@ -16,4 +16,9 @@ public class ReturnSet {
 		blockageList = new ArrayList<LReturn>();
 	}
 
+	public boolean addBlockage(LReturn block) {
+		blockageList.add(block);
+		return true;
+	}
+	
 }
