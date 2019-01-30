@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class VLsensor {
 	int counter;
+	Orientation myOrientation;
 	ArrayList<int []> res;
 	int [] sense1;
 	int [] sense2;
@@ -12,6 +13,7 @@ public class VLsensor {
 	
 	public VLsensor() {
 		counter = 0;
+		myOrientation = Orientation.antiClockwise;
 		res = new ArrayList <int []>();
 		sense1 = new int [] {1,2}; //set1 needs to be 360
 		res.add(sense1);
@@ -25,6 +27,10 @@ public class VLsensor {
 	
 	public int [] sense(int index){
 		return res.get(index);
+	}
+	
+	public Orientation getOrientation() {
+		return myOrientation;
 	}
 
 }
