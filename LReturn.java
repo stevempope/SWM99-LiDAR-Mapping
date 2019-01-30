@@ -3,46 +3,49 @@ package lidarMapping;
 import java.util.ArrayList;
 
 public class LReturn {
-	int startAngle;
-	int endAngle;
-	ArrayList<Integer> returnList;
+	private Integer startAngle;
+	private Integer endAngle;
+	private ArrayList<Integer> returnList;
 	
 	public LReturn () {
-		startAngle = 0;
-		endAngle = 0;
 		returnList = new ArrayList<Integer>();
 	}
 	
-	public LReturn (int start, ArrayList<Integer> blocks, int end) {
+	public LReturn (Integer start, Integer blockage) {
+		startAngle = start;
+		returnList = new ArrayList<Integer>();
+	}
+	
+	public LReturn (Integer start, ArrayList<Integer> blocks, Integer end) {
 		startAngle = start;
 		returnList = blocks;
 		endAngle = end;
 	}
 	
-	public int getStart() {
+	public Integer getStart() {
 		return startAngle;
 	}
 	
-	public boolean setStart(int start) {
+	public boolean setStart(Integer start) {
 		startAngle = start;
 		return true;
 	}
 	
-	public int getEnd() {
+	public Integer getEnd() {
 		return endAngle;
 	}
 	
-	public boolean setEnd(int end) {
+	public boolean setEnd(Integer end) {
 		endAngle = end;
 		return true;
 	}
 	
-	public int getDistance(int theAngle) {
+	public Integer getDistance(Integer theAngle) {
 		return returnList.get(theAngle);
 	}
 	
-	public boolean setDistance(int theAngle, int theDistance) {
-		returnList.add(theAngle, theDistance);
+	public boolean setDistance(Integer theDistance) {
+		returnList.add(theDistance);
 		return true;
 	}
 

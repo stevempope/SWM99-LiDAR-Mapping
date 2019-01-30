@@ -22,11 +22,11 @@ import java.util.ArrayList;
 
 public class VLsensor {
 	Orientation myOrientation;
-	ArrayList<int []> res;									//Stream of 'Sensed' test data.
-	int [] sense1;											//Test data sets for consecutive reads.
-	int [] sense2;
-	int [] sense3;
-	int [] sense4;
+	ArrayList<Integer []> res;									//Stream of 'Sensed' test data.
+	Integer [] sense1;											//Test data sets for consecutive reads.
+	Integer [] sense2;
+	Integer [] sense3;
+	Integer [] sense4;
 	
 	/**
 	 * Sensor constructor.
@@ -37,14 +37,14 @@ public class VLsensor {
 	
 	public VLsensor() {
 		myOrientation = Orientation.antiClockwise;
-		res = new ArrayList <int []>();
-		sense1 = new int [] {1,2}; //set1 needs to be 360
+		res = new ArrayList <Integer []>();
+		sense1 = new Integer [] {1,2}; //set1 needs to be 360
 		res.add(sense1);
-		sense2 = new int [] {2,3,4,5,6,7,8,9};
+		sense2 = new Integer [] {2,3,4,5,6,7,8,9};
 		res.add(sense2);//etc
-		sense3 = new int [] {5};
+		sense3 = new Integer [] {5};
 		res.add(sense3);
-		sense4 = new int [] {10,15,10000,23};
+		sense4 = new Integer [] {10,15,10000,23};
 		res.add(sense4);
 	}
 	
@@ -57,14 +57,14 @@ public class VLsensor {
 	
 	public VLsensor(Orientation orient) {
 		myOrientation = orient;
-		res = new ArrayList <int []>();
-		sense1 = new int [] {1,2}; //set1 needs to be 360
+		res = new ArrayList <Integer []>();
+		sense1 = new Integer [] {1,2}; //set1 needs to be 360
 		res.add(sense1);
-		sense2 = new int [] {2,3,4,5,6,7,8,9};
+		sense2 = new Integer [] {2,3,4,5,6,7,8,9};
 		res.add(sense2);//etc
-		sense3 = new int [] {5};
+		sense3 = new Integer [] {5};
 		res.add(sense3);
-		sense4 = new int [] {10,15,10000,23};
+		sense4 = new Integer [] {10,15,10000,23};
 		res.add(sense4);
 	}
 	
@@ -75,7 +75,7 @@ public class VLsensor {
 	 * @param the index of the sense set in the ArrayList.
 	 * @return the Stream of test LiDAR data.
 	 */
-	public int [] sense(int index){
+	public Integer [] sense(Integer index){
 		return res.get(index);
 	}
 	
