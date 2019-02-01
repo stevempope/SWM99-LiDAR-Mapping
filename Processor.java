@@ -43,7 +43,7 @@ public class Processor {
 			else if (blockage.getStart() != null && blockage.getEnd() == null){ //gap not detected, in snake
 				blockage.setDistance(workingSet[i]);
 			}
-			//otherwise throw away
+			//otherwise throw away or ignore
 		}
 		return theResultSet;
 	}
