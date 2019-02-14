@@ -13,5 +13,14 @@ public class Map {
 		reads.add(read);
 		return true;
 	}
+	
+	public boolean clearMap() {
+		reads.clear();
+		return true;
+	}
+	
+	public ArrayList<ReturnSet> getBlockages(){
+		return reads;
+	}
 
 }
