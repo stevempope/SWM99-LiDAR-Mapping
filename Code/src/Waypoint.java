@@ -42,5 +42,14 @@ public class Waypoint {
 	public Integer getDistance() {
 		return theDistance;
 	}
-
+	
+	public boolean setAngle(Integer a) {
+		theAngle = a;
+		return true;
+	}
+	
+	public boolean setDistance(Integer d) {
+		theDistance = d;
+		return true;
+	}
 }

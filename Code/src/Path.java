@@ -37,4 +37,10 @@ public class Path {
 		}
 		else return null;
 	}
+	
+	public boolean clearPath() {
+		thePath.clear();
+		return true;
+	}
 }
+

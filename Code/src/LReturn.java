@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 public class LReturn {
 	private Integer startAngle;
+	private Integer startScore;
 	private Integer endAngle;
+	private Integer endScore;
 	private ArrayList<Integer> returnList;
 	
 	public LReturn () {
@@ -48,5 +50,30 @@ public class LReturn {
 		returnList.add(theDistance);
 		return true;
 	}
+	
+	public Integer getStartScore() {
+		return startScore;
+	}
+	
+	public boolean setStartScore(Integer score) {
+		startScore = score;
+		return true;
+	}
+	
+	public Integer getEndScore() {
+		return endScore;
+	}
 
+	public boolean setEndScore(Integer score) {
+		endScore = score;
+		return true;
+	}
+	
+	public Integer getStartDist() {
+		return returnList.get(0);
+	}
+	
+	public Integer getEndDist() {
+		return returnList.get(returnList.size() -1);
+	}
 }
