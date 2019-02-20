@@ -18,8 +18,8 @@ import java.util.ArrayList;
  */
 
 public class ReturnSet {
-	Orientation theOrientation;
-	ArrayList<LReturn> blockageList;
+	private Orientation theOrientation;
+	private ArrayList<LReturn> blockageList;
 
 	/**
 	 * The base constructor for a ReturnSet. This assumes an anti-clockwise rotation.
@@ -50,4 +50,13 @@ public class ReturnSet {
 		return true;
 	}
 
+	public Orientation getOrientation() {
+		return theOrientation;
+		
+	}
+	
+	public ArrayList<LReturn> getBlockages(){
+		return blockageList;
+		
+	}
 }
