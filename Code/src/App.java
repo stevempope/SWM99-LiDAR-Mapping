@@ -8,6 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+/**
+ * The view is the visual representation of how my model is displayed to the user.
+ *
+ * @author Stephen Pope 15836791
+ * @version 0.1
+ */
+
 public class App extends Application{
 	
 	public static void main (String [] args) {
