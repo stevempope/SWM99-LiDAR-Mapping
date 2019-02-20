@@ -50,7 +50,7 @@ public class Pathfinder {
 			thePath.clearPath();
 			best = new Waypoint(0, 200000);
 			for (ReturnSet r: theMap.getBlockages()) {
-				for(LReturn l: r.blockageList) {
+				for(LReturn l: r.getBlockages()) {
 					l.setStartScore(l.getStartDist());
 					l.setEndScore(l.getEndDist());
 					if(l.getStartScore() <= best.getDistance()) {

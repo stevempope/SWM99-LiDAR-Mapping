@@ -114,4 +114,24 @@ public class UnitTesting {
 		assertTrue(b.getBlockages().get(1).getEnd() == 100);
 		assertTrue(b.getBlockages().get(1).getEndDist() == 129);
 	}
+	
+	/*
+	 * VLSensor Suite
+	 */
+	
+	@Test
+	public void VLSensorTest() {
+		VLsensor testSensor1 = new VLsensor();
+		VLsensor testSensor2 = new VLsensor(Orientation.clockwise);
+		
+		assertTrue(testSensor1.getOrientation() == Orientation.antiClockwise);
+		assertTrue(testSensor1.sense(0).length == 360);
+		assertTrue(testSensor1.sense(1).length == 360);
+		assertTrue(testSensor1.sense(2).length == 360);
+		
+		assertTrue(testSensor2.getOrientation() == Orientation.clockwise);
+		assertTrue(testSensor2.sense(0).length == 360);
+		assertTrue(testSensor2.sense(1).length == 360);
+		assertTrue(testSensor2.sense(2).length == 360);
+	}
 }
