@@ -163,4 +163,60 @@ public class UnitTesting {
 		theMap.clearMap();
 		assertTrue(theMap.getBlockages().size() == 0);
 	}
+	
+	/*
+	 * Waypoint Suite
+	 */
+	
+	@Test
+	public void WaypointTest(){
+		Waypoint wp0 = new Waypoint();
+		assertTrue(wp0.getAngle() == null);
+		assertTrue(wp0.getDistance() == null);
+		wp0.setAngle(0);
+		wp0.setDistance(112910);
+		assertTrue(wp0.getAngle() == 0);
+		assertTrue(wp0.getDistance() == 112910);
+		
+		Waypoint wp1 = new Waypoint (5, 10000);
+		assertTrue(wp1.getAngle() == 5);
+		assertTrue(wp1.getDistance() == 10000);
+	}
+	
+	/*
+	 * Path Suite
+	 */
+	
+	@Test
+	public void PathTest() {
+		Waypoint wp0 = new Waypoint(1,1);
+		Waypoint wp1 = new Waypoint(1,100);
+		Waypoint wp2 = new Waypoint(84,200); 
+		Path testPath = new Path();
+		testPath.addWaypoint(wp0);
+		testPath.addWaypoint(wp1);
+		testPath.addWaypoint(wp2);
+		testPath.insertIntoPath(1, wp0);
+		
+		assertTrue(testPath.getPath().size() == 4);
+		assertTrue(testPath.popNextWaypoint() == wp0);
+		assertTrue(testPath.getPath().size() == 3);
+		testPath.removePathWaypoint(2);
+		assertTrue(testPath.getPath().size() ==2);
+		testPath.clearPath();
+		assertTrue(testPath.popNextWaypoint() == null);
+		assertTrue(testPath.getPath().size() == 0);
+		
+		
+	}
+	
+	/*
+	 * Pathfinder Suite
+	 */
+	//TODO
+	
+	/*
+	 * Processor Suite
+	 */
+	//TODO
 }
