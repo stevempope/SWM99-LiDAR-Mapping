@@ -134,4 +134,33 @@ public class UnitTesting {
 		assertTrue(testSensor2.sense(1).length == 360);
 		assertTrue(testSensor2.sense(2).length == 360);
 	}
+	
+	/*
+	 * Map Suite
+	 */
+	
+	@Test
+	public void MapTest() {
+		ArrayList<Integer> blocks = new ArrayList<Integer>();
+		for (int i = 0; i < 90; i++) {
+			blocks.add(i + 40);
+		}
+		LReturn return1 = new LReturn(15, blocks, 105);
+		LReturn return2 = new LReturn(150, blocks, 240);
+		LReturn return3 = new LReturn(258, blocks, 348);
+		LReturn return4 = new LReturn(9, blocks, 99);
+		ReturnSet rs1 = new ReturnSet();
+		rs1.addBlockage(return1);
+		rs1.addBlockage(return2);
+		rs1.addBlockage(return3);
+		ReturnSet rs2 = new ReturnSet();
+		rs2.addBlockage(return4);
+		Map theMap = new Map();
+		theMap.addScan(rs1);
+		theMap.addScan(rs2);
+		assertTrue(theMap.getBlockages().size() == 2);
+		assertTrue(theMap.getBlockages().get(0).getOrientation() == Orientation.antiClockwise);
+		theMap.clearMap();
+		assertTrue(theMap.getBlockages().size() == 0);
+	}
 }
