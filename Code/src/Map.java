@@ -47,5 +47,5 @@ public class Map {
 	public ArrayList<ReturnSet> getBlockages(){
 		return reads;
 	}
-
+	
 }

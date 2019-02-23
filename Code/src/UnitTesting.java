@@ -105,7 +105,6 @@ public class UnitTesting {
 		
 		LReturn testBlock3 = new LReturn(89, blocks, 0);
 		LReturn testBlock4 = new LReturn(189, blocks, 100);
-		//TODO Check that anti and clockwise are correct - circle angles are odd
 		
 		b.addBlockage(testBlock3);
 		b.addBlockage(testBlock4);
@@ -207,16 +206,95 @@ public class UnitTesting {
 		assertTrue(testPath.popNextWaypoint() == null);
 		assertTrue(testPath.getPath().size() == 0);
 		
-		
 	}
+	
+	/*
+	 * Processor Suite
+	 */
+	
+	@Test
+	public void ProcessorTest() {
+		VLsensor sensor = new VLsensor();
+		Integer agentSize = 10;
+		Map theMap = new Map();
+		Processor tp = new Processor(sensor, agentSize);
+		
+		tp.updateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(0).getBlockages().size() == 3);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(0).getStart() == 1);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(0).getStartDist() == 11);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(0).getEnd() == 21);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(0).getEndDist() == 21);
+		
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(1).getStart() == 22);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(1).getStartDist() == 99);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(1).getEnd() == 22);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(1).getEndDist() == 99);
+		
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(2).getStart() == 23);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(2).getStartDist() == 23);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(2).getEnd() == 358);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(2).getEndDist() == 358);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(2).getDistance(4) == 27);
+		
+		tp.updateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(1).getBlockages().get(0).getStart() == 0);
+		assertTrue(theMap.getBlockages().get(1).getBlockages().get(0).getStartDist() == 100);
+		assertTrue(theMap.getBlockages().get(1).getBlockages().get(0).getEnd() == 359);
+		assertTrue(theMap.getBlockages().get(1).getBlockages().get(0).getEndDist() == 100);
+		
+		tp.updateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(2).getBlockages().size() == 7);
+		
+		sensor = new VLsensor(Orientation.clockwise);
+		tp =  new Processor(sensor,agentSize);
+		
+		tp.updateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(3).getBlockages().size() == 4);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getStart() == 0);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getStartDist() == 11);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getEnd() == 4);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getEndDist() == 4);
+		
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(1).getStart() == 5);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(1).getStartDist() == 1000);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(1).getEnd() == 5);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(1).getEndDist() == 1000);
+		
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(2).getStart() == 6);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(2).getStartDist() == 6);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(2).getEnd() == 358);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(2).getEndDist() == 358);
+		
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(3).getStart() == 359);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(3).getStartDist() == 300);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(3).getEnd() == 359);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(3).getEndDist() == 300);
+		
+		tp.updateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(4).getBlockages().size() == 1);
+		assertTrue(theMap.getBlockages().get(4).getBlockages().get(0).getStart() == 0);
+		assertTrue(theMap.getBlockages().get(4).getBlockages().get(0).getStartDist() == 100);
+		assertTrue(theMap.getBlockages().get(4).getBlockages().get(0).getEnd() == 359);
+		assertTrue(theMap.getBlockages().get(4).getBlockages().get(0).getEndDist() == 100);
+		
+		tp.updateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(5).getBlockages().size() == 7);
+
+
+	}
+	
 	
 	/*
 	 * Pathfinder Suite
 	 */
 	//TODO
 	
-	/*
-	 * Processor Suite
-	 */
-	//TODO
+	
 }

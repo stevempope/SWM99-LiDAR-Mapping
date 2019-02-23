@@ -14,7 +14,6 @@ public class Waypoint {
 	private Integer theDistance;
 	
 	public Waypoint() {
-		
 	}
 	
 	/**
