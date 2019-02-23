@@ -16,40 +16,39 @@ package lidarMapping;
  */
 
 public class Processor {
-	
-	VLsensor theSensor;
-	ReturnSet theResultSet;
-	Integer counter;
-	Integer agentSize;
-	
+
+	private VLsensor theSensor;
+	private ReturnSet theResultSet;
+	private Integer counter;
+	private Integer agentSize;
+
 	/**
 	 * Deprecated?
 	 */
 	public Processor() {
 	}
-	
+
 	/**
 	 * The constructor for a Processor
 	 * @param vls - the Virtual LiDAR sensor we will recieve input from
 	 * @param size - The size of the pathfinding agent
 	 */
 	public Processor (VLsensor vls, Integer size) {
-	counter = 0;
-	agentSize =  size;
-	theSensor = vls;
-	theResultSet = new ReturnSet(theSensor.getOrientation());
+		counter = 0;
+		agentSize =  size;
+		theSensor = vls;
 	}
-	
+
 	/**
 	 * Adds a ResultSet to the Map
 	 * @param theMap - the Map we are appending to
 	 * @return result of the addition operation
 	 */
-	public boolean updateMap(Map theMap) {
-		return theMap.addScan(this.scanEnvironment(theResultSet));
-		
+	public void updateMap(Map theMap) {
+		theResultSet = new ReturnSet(theSensor.getOrientation());
+		theMap.addScan(scanEnvironment(theResultSet));
 	}
-	
+
 	/**
 	 * The core logic of a processor.
 	 * There are some major conditions we consider when looking at the environment:
@@ -70,33 +69,43 @@ public class Processor {
 	 * unreachable, so the only condition that means we get this far is if we encounter a value
 	 * 0, indicating we are beyond the range of the sensor. In this case we ignore the return and
 	 * load the next one
-	 * @param map - the Map
+	 * @param retSet - the Map
 	 * @return the ResultSet of blockages
 	 */
-	public ReturnSet scanEnvironment(ReturnSet map) {
+	public ReturnSet scanEnvironment(ReturnSet retSet) {
 		Integer [] workingSet = theSensor.sense(counter);
 		Integer prev = 0;
 		counter++;
+		Integer temp = 0;
 		LReturn blockage = new LReturn();
-		for (Integer i = 0; i > workingSet.length; i++) {
-			if ((Math.abs(prev-workingSet[i]) > agentSize)) { //gap detected
-				if(blockage.getStart() == null) {  //if not in snake
-					blockage = new LReturn(i,workingSet[i]);
-					prev = workingSet[i];
+		for (Integer i: workingSet) {
+			if (i > 0) {
+				if (blockage.getStart() == null) {
+					blockage.setStart(temp);
 				}
-				else if (blockage.getEnd() == null) { //if in unfinished snake
-					blockage.setEnd(i-1);
-					theResultSet.addBlockage(blockage);
-					prev = workingSet[i];
-					blockage = null;
+				else if (Math.abs(i - prev) > agentSize) {
+					blockage.setEnd(temp -1);
+					retSet.addBlockage(blockage);
+					blockage = new LReturn();
+					blockage.setStart(temp);
+				}				
+				blockage.setDistance(i);
+				if (temp == workingSet.length-1) {
+					blockage.setEnd(temp);
+					retSet.addBlockage(blockage);
 				}
 			}
-			else if (blockage.getStart() != null && blockage.getEnd() == null){ //gap not detected, in snake
-				blockage.setDistance(workingSet[i]);
+			else if (blockage.getStart() != null) {
+				blockage.setEnd(temp - 1);
+				retSet.addBlockage(blockage);
+				blockage = new LReturn();
 			}
-			//otherwise throw away or ignore
+			prev = i;
+			temp++;
 		}
-		return theResultSet;
+		return retSet;
 	}
-
 }
+
+
+
