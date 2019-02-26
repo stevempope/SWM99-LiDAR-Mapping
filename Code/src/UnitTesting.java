@@ -286,8 +286,6 @@ public class UnitTesting {
 		tp.updateMap(theMap);
 		
 		assertTrue(theMap.getBlockages().get(5).getBlockages().size() == 7);
-
-
 	}
 	
 	

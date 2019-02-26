@@ -49,6 +49,13 @@ public class Processor {
 		theMap.addScan(scanEnvironment(theResultSet));
 	}
 
+	public void smarterUpdateMap(Map theMap) {
+		theResultSet = new ReturnSet(theSensor.getOrientation());
+		theResultSet = scanEnvironment(theResultSet);
+		theResultSet = blockageAmalgamation(theResultSet);
+		theMap.addScan(theResultSet);
+	}
+
 	/**
 	 * The core logic of a processor.
 	 * There are some major conditions we consider when looking at the environment:
@@ -104,6 +111,35 @@ public class Processor {
 			temp++;
 		}
 		return retSet;
+	}
+
+	public ReturnSet blockageAmalgamation(ReturnSet res) {
+		ReturnSet temp = new ReturnSet();
+		ReturnSet scratch = new ReturnSet();
+		temp = res;
+		if (temp.getBlockages().size() > 1) {
+			LReturn prev = new LReturn();
+			prev = temp.getBlockages().get(0);
+			for(LReturn l : temp.getBlockages()) {
+				for(int i = 0; i > temp.getBlockages().size(); i++) {
+					double cosRule = ((prev.getEndDist()*prev.getEndDist())+(temp.getBlockages().get(i).getStartDist()*temp.getBlockages().get(i).getStartDist()))-2*(prev.getEndDist()*temp.getBlockages().get(i).getStartDist()*Math.cos(Math.abs(prev.getEnd()-l.getStart())));
+					cosRule = Math.sqrt(cosRule);
+					if(cosRule < agentSize && cosRule > 0) {
+						prev.setEnd(temp.getBlockages().get(i).getEnd());
+						prev.appendBlocks(temp.getBlockages().get(i).getBlocks());
+						temp.removeReturn(temp.getBlockages().get(i));
+						scratch.getBlockages().clear();
+					}
+					else if (cosRule > 0){
+						temp.getBlockages().get(i).insertZerosBefore(Math.abs(prev.getEnd()-temp.getBlockages().get(i).getStart()));
+						scratch.addBlockage(temp.getBlockages().get(i));
+					}
+				}
+				prev = l;
+			}
+		}
+		return temp;
+
 	}
 }
 
