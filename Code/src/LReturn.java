@@ -166,4 +166,18 @@ public class LReturn {
 	public Integer getEndDist() {
 		return returnList.get(returnList.size() -1);
 	}
+	
+	public void appendBlocks(ArrayList<Integer> blocks){
+		returnList.addAll(blocks);
+	}
+	
+	public ArrayList<Integer> getBlocks(){
+		return returnList;
+	}
+
+	public void insertZerosBefore(int zeros) {
+		for(int i = 0; i > zeros; i++) {
+			returnList.add(i,0);
+		}		
+	}
 }

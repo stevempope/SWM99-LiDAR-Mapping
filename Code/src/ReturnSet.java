@@ -59,4 +59,8 @@ public class ReturnSet {
 		return blockageList;
 		
 	}
+	
+	public void removeReturn(LReturn tbr) {
+		blockageList.remove(tbr);
+	}
 }
