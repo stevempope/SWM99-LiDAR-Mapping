@@ -219,8 +219,6 @@ public class UnitTesting {
 		Map theMap = new Map();
 		Processor tp = new Processor(sensor, agentSize);
 		
-		/*
-		
 		tp.updateMap(theMap);
 		
 		assertTrue(theMap.getBlockages().get(0).getBlockages().size() == 3);
@@ -287,7 +285,7 @@ public class UnitTesting {
 		
 		tp.updateMap(theMap);
 		
-		assertTrue(theMap.getBlockages().get(5).getBlockages().size() == 7);*/
+		assertTrue(theMap.getBlockages().get(5).getBlockages().size() == 7);
 		
 		sensor = new VLsensor(Orientation.antiClockwise);
 		theMap = new Map();

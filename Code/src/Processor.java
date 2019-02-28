@@ -169,7 +169,7 @@ public class Processor {
 		prev = orig.getBlockages().get(counter);
 		for(LReturn l : orig.getBlockages()) {
 			if (orig.getBlockages().indexOf(l) > orig.getBlockages().indexOf(prev)) {
-				cosRule = ((prev.getEndDist()*prev.getEndDist())+(l.getStartDist()*l.getStartDist()))-2*(prev.getEndDist()*l.getStartDist()*Math.cos(Math.abs(prev.getEnd()-l.getStart())));
+				cosRule = ((prev.getEndDist()*prev.getEndDist())+(l.getStartDist()*l.getStartDist()))-2*(prev.getEndDist()*l.getStartDist()*Math.cos(Math.toRadians(Math.abs(prev.getEnd()-l.getStart()))));
 				cosRule = Math.sqrt(cosRule);
 				if (cosRule >= agentSize) {
 					pos = orig.getBlockages().indexOf(l);
@@ -178,7 +178,7 @@ public class Processor {
 					while(zeros != 0) {
 						l.insertZero();
 						zeros--;
-					}
+					} //FIXME there is a bug where alternate numbers wont append 0's
 					zeros = 0;
 					scratch.addBlockage(l);
 				}
