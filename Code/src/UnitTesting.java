@@ -286,6 +286,15 @@ public class UnitTesting {
 		tp.updateMap(theMap);
 		
 		assertTrue(theMap.getBlockages().get(5).getBlockages().size() == 7);
+		
+		sensor = new VLsensor(Orientation.antiClockwise);
+		theMap = new Map();
+		tp = new Processor(sensor, agentSize);
+		
+		tp.smarterUpdateMap(theMap);
+		tp.smarterUpdateMap(theMap);
+		tp.smarterUpdateMap(theMap);
+		System.out.print("boo");
 	}
 	
 	

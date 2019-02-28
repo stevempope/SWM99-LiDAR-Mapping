@@ -113,35 +113,55 @@ public class Processor {
 		return retSet;
 	}
 
-	public ReturnSet blockageAmalgamation(ReturnSet res) {
-		ReturnSet temp = new ReturnSet();
-		ReturnSet scratch = new ReturnSet();
-		temp = res;
-		if (temp.getBlockages().size() > 1) {
-			LReturn prev = new LReturn();
-			prev = temp.getBlockages().get(0);
-			for(LReturn l : temp.getBlockages()) {
-				for(int i = 0; i > temp.getBlockages().size(); i++) {
-					double cosRule = ((prev.getEndDist()*prev.getEndDist())+(temp.getBlockages().get(i).getStartDist()*temp.getBlockages().get(i).getStartDist()))-2*(prev.getEndDist()*temp.getBlockages().get(i).getStartDist()*Math.cos(Math.abs(prev.getEnd()-l.getStart())));
-					cosRule = Math.sqrt(cosRule);
-					if(cosRule < agentSize && cosRule > 0) {
-						prev.setEnd(temp.getBlockages().get(i).getEnd());
-						prev.appendBlocks(temp.getBlockages().get(i).getBlocks());
-						temp.removeReturn(temp.getBlockages().get(i));
-						scratch.getBlockages().clear();
-					}
-					else if (cosRule > 0){
-						temp.getBlockages().get(i).insertZerosBefore(Math.abs(prev.getEnd()-temp.getBlockages().get(i).getStart()));
-						scratch.addBlockage(temp.getBlockages().get(i));
-					}
+	public ReturnSet blockageAmalgamation(ReturnSet original) {
+		ReturnSet res = new ReturnSet();
+		res = original;
+		if (res.getBlockages().size() > 1) {
+			res = merge(res, 0);
+			for(int i = 1; i > res.getBlockages().size(); i++) {
+				if (i < res.getBlockages().size()) {
+					res = merge(res, i);
 				}
-				prev = l;
 			}
 		}
-		return temp;
+		return res;
+	}
 
+	public ReturnSet merge (ReturnSet orig, int counter) {
+		ReturnSet temp = new ReturnSet();
+		ReturnSet scratch = new ReturnSet();
+		double cosRule;
+		int zeros;
+		LReturn prev = new LReturn();
+		prev = orig.getBlockages().get(counter);
+		for(LReturn l : orig.getBlockages()) {
+			if (orig.getBlockages().indexOf(l) > orig.getBlockages().indexOf(prev)) {
+				cosRule = ((prev.getEndDist()*prev.getEndDist())+(l.getStartDist()*l.getStartDist()))-2*(prev.getEndDist()*l.getStartDist()*Math.cos(Math.abs(prev.getEnd()-l.getStart())));
+				cosRule = Math.sqrt(cosRule);
+				if (cosRule >= agentSize) {
+					zeros = Math.abs(prev.getEnd()-l.getStart())-1;
+					l.insertZerosBefore(zeros);
+					scratch.addBlockage(l);
+				}
+				else {
+					for(LReturn m : scratch.getBlockages()) {
+						prev.appendBlocks(m.getBlocks());
+					}
+					prev.appendBlocks(l.getBlocks());
+					prev.setEnd(l.getEnd());
+					scratch.removeAll();
+					temp.addBlockage(prev);
+				}
+			}
+		}
+		if(temp.getBlockages().isEmpty()) {
+			temp.addBlockage(prev);
+		}
+		for(LReturn n: scratch.getBlockages()) {
+			temp.addBlockage(n);
+		}
+		return temp;	
 	}
 }
-
 
 
