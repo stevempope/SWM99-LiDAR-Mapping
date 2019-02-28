@@ -175,9 +175,7 @@ public class LReturn {
 		return returnList;
 	}
 
-	public void insertZerosBefore(int zeros) {
-		for(int i = 0; i > zeros; i++) {
-			returnList.add(i,0);
-		}		
+	public void insertZero() {
+		returnList.add(0, 0);
 	}
 }

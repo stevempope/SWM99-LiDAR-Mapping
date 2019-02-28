@@ -112,7 +112,7 @@ public class Processor {
 		}
 		return retSet;
 	}
-	
+
 	/**
 	 * Amalgamates the blocks in a ReturnSet if there are any spans between objects smaller
 	 * than the size of our agent. As explained by the bollard problem, it is possible for
@@ -138,7 +138,7 @@ public class Processor {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * This is where the merging magic happens. It is a factorial operation by nature,
 	 * we have to consider all of the other blockages in the returnSet to check if there
@@ -163,7 +163,8 @@ public class Processor {
 		ReturnSet temp = new ReturnSet();
 		ReturnSet scratch = new ReturnSet();
 		double cosRule;
-		int zeros;
+		int zeros = 0;
+		int pos;
 		LReturn prev = new LReturn();
 		prev = orig.getBlockages().get(counter);
 		for(LReturn l : orig.getBlockages()) {
@@ -171,8 +172,14 @@ public class Processor {
 				cosRule = ((prev.getEndDist()*prev.getEndDist())+(l.getStartDist()*l.getStartDist()))-2*(prev.getEndDist()*l.getStartDist()*Math.cos(Math.abs(prev.getEnd()-l.getStart())));
 				cosRule = Math.sqrt(cosRule);
 				if (cosRule >= agentSize) {
-					zeros = Math.abs(prev.getEnd()-l.getStart())-1;
-					l.insertZerosBefore(zeros);
+					pos = orig.getBlockages().indexOf(l);
+					pos--;
+					zeros = Math.abs(orig.getBlockages().get(pos).getEnd() - l.getStart())-1;
+					while(zeros != 0) {
+						l.insertZero();
+						zeros--;
+					}
+					zeros = 0;
 					scratch.addBlockage(l);
 				}
 				else {
@@ -182,8 +189,8 @@ public class Processor {
 					prev.appendBlocks(l.getBlocks());
 					prev.setEnd(l.getEnd());
 					scratch.removeAll();
-					temp.addBlockage(prev);
 				}
+				cosRule = 0;
 			}
 		}
 		if(temp.getBlockages().isEmpty()) {
