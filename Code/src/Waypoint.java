@@ -42,13 +42,11 @@ public class Waypoint {
 		return theDistance;
 	}
 	
-	public boolean setAngle(Integer a) {
+	public void setAngle(Integer a) {
 		theAngle = a;
-		return true;
 	}
 	
-	public boolean setDistance(Integer d) {
+	public void setDistance(Integer d) {
 		theDistance = d;
-		return true;
 	}
 }

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * ReturnSets store an ArrayList of LReturns and the orientation of those returns.
  * 
  * @author Stephen Pope 15836791
- * @version 0.1
+ * @version 0.2
  */
 
 public class ReturnSet {
@@ -45,9 +45,8 @@ public class ReturnSet {
 	 * @param block - The new LReturn
 	 * @return true
 	 */
-	public boolean addBlockage(LReturn block) {
+	public void addBlockage(LReturn block) {
 		blockageList.add(block);
-		return true;
 	}
 
 	public Orientation getOrientation() {

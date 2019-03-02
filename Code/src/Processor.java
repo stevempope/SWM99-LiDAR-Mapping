@@ -12,7 +12,7 @@ package lidarMapping;
  * This is so that we can set the end of a blockage
  * 
  * @author Stephen Pope 15836791
- * @version 0.2
+ * @version 0.3
  */
 
 public class Processor {

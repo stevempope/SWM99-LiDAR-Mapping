@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * This allows input from multiple sensors to exist in the same space.
  * 
  * @author Stephen Pope 15836791
- * @version 0.1
+ * @version 0.2
  *
  */
 public class Map {
@@ -25,9 +25,8 @@ public class Map {
 	 * @param read - the new ReturnSet to be added
 	 * @return true
 	 */
-	public boolean addScan(ReturnSet read) {
+	public void addScan(ReturnSet read) {
 		reads.add(read);
-		return true;
 	}
 	
 	/**
@@ -35,9 +34,8 @@ public class Map {
 	 * For testing only.
 	 * @return true
 	 */
-	public boolean clearMap() {
+	public void clearMap() {
 		reads.clear();
-		return true;
 	}
 	
 	/**

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * A Path is a collection of Waypoints, followed by an agent to a destination
  * @author Stephen Pope 15836791
- * @version 0.1
+ * @version 0.2
  */
 
 public class Path {
@@ -25,9 +25,8 @@ public class Path {
 	 * @param wp - the new Waypoint
 	 * @return true
 	 */
-	public boolean addWaypoint(Waypoint wp) {
+	public void addWaypoint(Waypoint wp) {
 		thePath.add(wp);
-		return true;
 	}
 
 	/**
@@ -37,9 +36,8 @@ public class Path {
 	 * @param wp - the physical location of the blockage
 	 * @return true
 	 */
-	public boolean insertIntoPath(Integer loc, Waypoint wp) {
+	public void insertIntoPath(Integer loc, Waypoint wp) {
 		thePath.add(loc, wp);
-		return true;
 	}
 
 	/**
@@ -48,9 +46,8 @@ public class Path {
 	 * @param loc -location of Waypoint in the list to be removed
 	 * @return true
 	 */
-	public boolean removePathWaypoint(int loc) {
+	public void removePathWaypoint(int loc) {
 		thePath.remove(loc);
-		return true;
 	}
 	
 	/**
@@ -79,9 +76,8 @@ public class Path {
 	 * Empties the Path of all Waypoints. Used if we need to recalculate the Path
 	 * @return true
 	 */
-	public boolean clearPath() {
+	public void clearPath() {
 		thePath.clear();
-		return true;
 	}
 }
 
