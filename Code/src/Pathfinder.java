@@ -46,6 +46,9 @@ public class Pathfinder {
 		if (world.getBlockages().isEmpty()) {
 			thePath.addWaypoint(destination);
 		}
+		else if (lineOfSight(destination) == true) {
+			
+		}
 		else {
 			thePath.clearPath();
 			best = new Waypoint(0, 200000);
@@ -66,6 +69,10 @@ public class Pathfinder {
 			thePath.addWaypoint(best);
 		}
 		return thePath;
+	}
+
+	private boolean lineOfSight(Waypoint destination) {
+		return false;
 	}
 
 }

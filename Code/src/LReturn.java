@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * values from the latest run of the pathfinding algorithm.
  * 
  * @author Stephen Pope 15836791
- * @version 0.1
+ * @version 0.2
  *
  */
 
@@ -69,9 +69,8 @@ public class LReturn {
 	 * @param start - the starting angle of a blockage
 	 * @return true
 	 */
-	public boolean setStart(Integer start) {
+	public void setStart(Integer start) {
 		startAngle = start;
-		return true;
 	}
 
 	/**
@@ -87,9 +86,8 @@ public class LReturn {
 	 * @param end
 	 * @return true
 	 */
-	public boolean setEnd(Integer end) {
+	public void setEnd(Integer end) {
 		endAngle = end;
-		return true;
 	}
 
 	/**
@@ -106,9 +104,8 @@ public class LReturn {
 	 * @param theDistance - new distance in mm
 	 * @return true
 	 */
-	public boolean setDistance(Integer theDistance) {
+	public void setDistance(Integer theDistance) {
 		returnList.add(theDistance);
-		return true;
 	}
 
 	/**
@@ -125,9 +122,8 @@ public class LReturn {
 	 * @param score - the calculated score
 	 * @return true
 	 */
-	public boolean setStartScore(Integer score) {
+	public void setStartScore(Integer score) {
 		startScore = score;
-		return true;
 	}
 	
 	/**
@@ -144,9 +140,8 @@ public class LReturn {
 	 * @param score - the calculated score
 	 * @return true
 	 */
-	public boolean setEndScore(Integer score) {
+	public void setEndScore(Integer score) {
 		endScore = score;
-		return true;
 	}
 	
 	/**
