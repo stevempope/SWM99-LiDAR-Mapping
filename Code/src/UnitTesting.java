@@ -307,7 +307,11 @@ public class UnitTesting {
 		
 		System.out.printf("tests complete \n");
 		tp.smarterUpdateMap(theMap);
-		System.out.println(theMap.getBlockages().get(3).getBlockages().size());
+		assertTrue(theMap.getBlockages().get(3).getBlockages().size() == 1);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getStartDist() == 50);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getDistance(1) == 0);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getStart() == 0);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getEnd() == 358);
 	}
 	
 	
