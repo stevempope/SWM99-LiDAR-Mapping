@@ -286,6 +286,32 @@ public class UnitTesting {
 		tp.updateMap(theMap);
 		
 		assertTrue(theMap.getBlockages().get(5).getBlockages().size() == 7);
+		
+		sensor = new VLsensor(Orientation.antiClockwise);
+		theMap = new Map();
+		tp = new Processor(sensor, agentSize);
+		
+		tp.smarterUpdateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(0).getBlockages().size() == 2);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(0).getEnd() == 358);
+		assertTrue(theMap.getBlockages().get(0).getBlockages().get(0).getEndDist() == 358);
+		
+		tp.smarterUpdateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(1).getBlockages().size() == 1);
+		
+		tp.smarterUpdateMap(theMap);
+		
+		assertTrue(theMap.getBlockages().get(2).getBlockages().size() == 7);
+		
+		System.out.printf("tests complete \n");
+		tp.smarterUpdateMap(theMap);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().size() == 1);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getStartDist() == 50);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getDistance(1) == 0);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getStart() == 0);
+		assertTrue(theMap.getBlockages().get(3).getBlockages().get(0).getEnd() == 358);
 	}
 	
 	
