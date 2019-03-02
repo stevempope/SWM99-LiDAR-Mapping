@@ -38,17 +38,18 @@ public class Pathfinder {
 	 * 
 	 * @param theMap - The environment dataset
 	 * @param destination - Where we want to go as a Waypoint
-	 * @param currentPosition - Where we are currently in the world
 	 * @return - The calculated path
 	 */
-	public Path pathfind(Map theMap, Waypoint destination, Waypoint currentPosition) {
+	public Path pathfind(Map theMap, Waypoint destination) {
+		best = new Waypoint(0,200000000);
 		if (theMap.getBlockages().isEmpty() || lineOfSight(destination, theMap) == true) {
 			thePath.addWaypoint(destination);
 		}
 		else {
-			//Best-first algorithm
+			System.out.print("moo");
+			//Best-first algorithm - only selects nearest node at the moment
+			//TODO ensure it picks the shortest total path not the nearest node
 			thePath.clearPath();
-			best = new Waypoint();
 			for (ReturnSet r: theMap.getBlockages()) {
 				for(LReturn l: r.getBlockages()) {
 					l.setStartScore(l.getStartDist());
@@ -65,14 +66,17 @@ public class Pathfinder {
 			}
 			thePath.addWaypoint(best);
 		}
+		System.out.printf("angle = %s, distance = %d \n",thePath.getPath().get(0).getAngle(), thePath.getPath().get(0).getDistance());
+		
 		return thePath;
 	}
 
 	private boolean lineOfSight(Waypoint destination, Map theMap) {
+		System.out.println("LOS TEST");
 		for (ReturnSet s : theMap.getBlockages()) {
 			for(LReturn m : s.getBlockages()) {
-				if (m.getStart() > destination.getAngle() && m.getEnd() < destination.getAngle()){
-					if(m.getDistance(destination.getAngle() - m.getStart()) <= destination.getDistance()) {
+				if (m.getStart() < destination.getAngle() && m.getEnd() > destination.getAngle()){
+					if(m.getDistance(destination.getAngle() - m.getStart()) >= destination.getDistance()) {
 						return true;
 					}
 				}

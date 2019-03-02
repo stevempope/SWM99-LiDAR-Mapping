@@ -318,7 +318,22 @@ public class UnitTesting {
 	/*
 	 * Pathfinder Suite
 	 */
-	//TODO
+	
+	@Test
+	public void pathfindingTest() {
+		VLsensor sensor = new VLsensor(Orientation.antiClockwise);
+		Integer agentSize = 10;
+		Map theMap = new Map();
+		Processor tp = new Processor(sensor, agentSize);
+		Pathfinder pf = new Pathfinder();
+		Waypoint dest = new Waypoint(300, 200);
+		
+		tp.smarterUpdateMap(theMap);
+		pf.pathfind(theMap, dest);
+		dest.setAngle(15);
+		dest.setDistance(400);
+		pf.pathfind(theMap, dest);
+	}
 	
 	
 }
