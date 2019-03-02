@@ -11,7 +11,7 @@ package lidarMapping;
  * optimal place)
  * 
  * @author Stephen Pope 15836791
- * @version 0.1
+ * @version 0.2
  */
 
 public class Pathfinder {
@@ -42,16 +42,13 @@ public class Pathfinder {
 	 * @return - The calculated path
 	 */
 	public Path pathfind(Map theMap, Waypoint destination, Waypoint currentPosition) {
-		Map world = theMap;
-		if (world.getBlockages().isEmpty()) {
+		if (theMap.getBlockages().isEmpty() || lineOfSight(destination, theMap) == true) {
 			thePath.addWaypoint(destination);
 		}
-		else if (lineOfSight(destination) == true) {
-			
-		}
 		else {
+			//Best-first algorithm
 			thePath.clearPath();
-			best = new Waypoint(0, 200000);
+			best = new Waypoint();
 			for (ReturnSet r: theMap.getBlockages()) {
 				for(LReturn l: r.getBlockages()) {
 					l.setStartScore(l.getStartDist());
@@ -71,7 +68,16 @@ public class Pathfinder {
 		return thePath;
 	}
 
-	private boolean lineOfSight(Waypoint destination) {
+	private boolean lineOfSight(Waypoint destination, Map theMap) {
+		for (ReturnSet s : theMap.getBlockages()) {
+			for(LReturn m : s.getBlockages()) {
+				if (m.getStart() > destination.getAngle() && m.getEnd() < destination.getAngle()){
+					if(m.getDistance(destination.getAngle() - m.getStart()) <= destination.getDistance()) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
