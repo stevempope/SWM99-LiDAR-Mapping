@@ -11,7 +11,7 @@ package lidarMapping;
  * optimal place)
  * 
  * @author Stephen Pope 15836791
- * @version 0.1
+ * @version 0.3
  */
 
 public class Pathfinder {
@@ -38,24 +38,19 @@ public class Pathfinder {
 	 * 
 	 * @param theMap - The environment dataset
 	 * @param destination - Where we want to go as a Waypoint
-	 * @param currentPosition - Where we are currently in the world
 	 * @return - The calculated path
 	 */
-	public Path pathfind(Map theMap, Waypoint destination, Waypoint currentPosition) {
-		Map world = theMap;
-		if (world.getBlockages().isEmpty()) {
+	public Path pathfind(Map theMap, Waypoint destination) {
+		best = new Waypoint(0,200000000);
+		if (theMap.getBlockages().isEmpty() || lineOfSight(destination, theMap) == true) {
 			thePath.addWaypoint(destination);
-		}
-		else if (lineOfSight(destination) == true) {
-			
 		}
 		else {
 			thePath.clearPath();
-			best = new Waypoint(0, 200000);
 			for (ReturnSet r: theMap.getBlockages()) {
 				for(LReturn l: r.getBlockages()) {
-					l.setStartScore(l.getStartDist());
-					l.setEndScore(l.getEndDist());
+					l.setStartScore(l.getStartDist() + cosRule(l.getStart(), l.getStartDist(), destination));
+					l.setEndScore(l.getEndDist() + cosRule(l.getEnd(), l.getEndDist(), destination));
 					if(l.getStartScore() <= best.getDistance()) {
 						best.setAngle(l.getStart());
 						best.setDistance(l.getStartDist());
@@ -67,12 +62,33 @@ public class Pathfinder {
 				}
 			}
 			thePath.addWaypoint(best);
+			thePath.addWaypoint(destination);
+			//TODO what if there is no valid path?
 		}
+		System.out.printf("angle = %s, distance = %d \n",thePath.getPath().get(0).getAngle(), thePath.getPath().get(0).getDistance());
+		
 		return thePath;
 	}
 
-	private boolean lineOfSight(Waypoint destination) {
+	private boolean lineOfSight(Waypoint destination, Map theMap) {
+		System.out.println("LOS TEST");
+		for (ReturnSet s : theMap.getBlockages()) {
+			for(LReturn m : s.getBlockages()) {
+				if (m.getStart() < destination.getAngle() && m.getEnd() > destination.getAngle()){
+					if(m.getDistance(destination.getAngle() - m.getStart()) >= destination.getDistance()) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
+	}
+	
+	private double cosRule(Integer start, Integer startDist, Waypoint destination) {
+		Integer a = startDist;
+		Integer c = destination.getDistance();
+		double b = Math.toRadians(Math.abs(start - destination.getAngle()));
+		return Math.sqrt((a*a + c*c) - 2*a*c*(Math.cos(b)));
 	}
 
 }
