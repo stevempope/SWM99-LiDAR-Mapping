@@ -327,12 +327,27 @@ public class UnitTesting {
 		Processor tp = new Processor(sensor, agentSize);
 		Pathfinder pf = new Pathfinder();
 		Waypoint dest = new Waypoint(300, 200);
+		Path thePath;
 		
 		tp.smarterUpdateMap(theMap);
-		pf.pathfind(theMap, dest);
+		thePath = pf.pathfind(theMap, dest);
+		assertTrue(thePath.getPath().size() == 1);
+		assertTrue(thePath.getPath().get(0) == dest);
+		
+		
 		dest.setAngle(15);
 		dest.setDistance(400);
-		pf.pathfind(theMap, dest);
+		thePath = pf.pathfind(theMap, dest);
+		assertTrue(thePath.getPath().size() == 2);
+		assertTrue(thePath.getPath().get(0).getAngle() == 0);
+		assertTrue(thePath.getPath().get(0).getDistance() == 11);
+		assertTrue(thePath.getPath().get(1) == dest);
+		
+		theMap.clearMap();
+		tp.smarterUpdateMap(theMap);
+		dest.setDistance(10000);
+		thePath = pf.pathfind(theMap, dest);
+		assertTrue(thePath.getPath().size() == 2);
 	}
 	
 	
