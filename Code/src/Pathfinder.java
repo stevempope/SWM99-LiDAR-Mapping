@@ -11,7 +11,7 @@ package lidarMapping;
  * optimal place)
  * 
  * @author Stephen Pope 15836791
- * @version 0.2
+ * @version 0.3
  */
 
 public class Pathfinder {
@@ -46,14 +46,11 @@ public class Pathfinder {
 			thePath.addWaypoint(destination);
 		}
 		else {
-			System.out.print("moo");
-			//Best-first algorithm - only selects nearest node at the moment
-			//TODO ensure it picks the shortest total path not the nearest node
 			thePath.clearPath();
 			for (ReturnSet r: theMap.getBlockages()) {
 				for(LReturn l: r.getBlockages()) {
-					l.setStartScore(l.getStartDist());
-					l.setEndScore(l.getEndDist());
+					l.setStartScore(l.getStartDist() + cosRule(l.getStart(), l.getStartDist(), destination));
+					l.setEndScore(l.getEndDist() + cosRule(l.getEnd(), l.getEndDist(), destination));
 					if(l.getStartScore() <= best.getDistance()) {
 						best.setAngle(l.getStart());
 						best.setDistance(l.getStartDist());
@@ -83,6 +80,13 @@ public class Pathfinder {
 			}
 		}
 		return false;
+	}
+	
+	private double cosRule(Integer start, Integer startDist, Waypoint destination) {
+		Integer a = startDist;
+		Integer c = destination.getDistance();
+		double b = Math.toRadians(Math.abs(start - destination.getAngle()));
+		return Math.sqrt((a*a + c*c) - 2*a*c*(Math.cos(b)));
 	}
 
 }

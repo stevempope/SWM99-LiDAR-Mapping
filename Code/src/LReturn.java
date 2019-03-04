@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 public class LReturn {
 	private Integer startAngle;
-	private Integer startScore;
+	private double startScore;
 	private Integer endAngle;
-	private Integer endScore;
+	private double endScore;
 	private ArrayList<Integer> returnList;
 
 	/**
@@ -112,7 +112,7 @@ public class LReturn {
 	 * Returns the calculated pathfinding score for the starting angle
 	 * @return the score
 	 */
-	public Integer getStartScore() {
+	public double getStartScore() {
 		return startScore;
 	}
 	
@@ -122,7 +122,7 @@ public class LReturn {
 	 * @param score - the calculated score
 	 * @return true
 	 */
-	public void setStartScore(Integer score) {
+	public void setStartScore(double score) {
 		startScore = score;
 	}
 	
@@ -130,7 +130,7 @@ public class LReturn {
 	 * Gets the calculated pathfinding score for the end of the blockage
 	 * @return the score
 	 */
-	public Integer getEndScore() {
+	public double getEndScore() {
 		return endScore;
 	}
 	
@@ -140,7 +140,7 @@ public class LReturn {
 	 * @param score - the calculated score
 	 * @return true
 	 */
-	public void setEndScore(Integer score) {
+	public void setEndScore(double score) {
 		endScore = score;
 	}
 	
