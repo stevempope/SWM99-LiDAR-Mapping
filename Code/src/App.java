@@ -16,6 +16,9 @@ import javafx.stage.Stage;
  */
 
 public class App extends Application{
+	Stage ps;
+	Parent pa;
+	Scene sc;
 
 	public static void main (String [] args) {
 		launch(args);
@@ -28,5 +31,8 @@ public class App extends Application{
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		ps = primaryStage;
+		pa = root;
+		sc = scene;
 	}
 }

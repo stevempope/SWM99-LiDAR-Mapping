@@ -349,6 +349,5 @@ public class UnitTesting {
 		thePath = pf.pathfind(theMap, dest);
 		assertTrue(thePath.getPath().size() == 2);
 	}
-	
-	
+		
 }
