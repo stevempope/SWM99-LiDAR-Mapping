@@ -46,4 +46,11 @@ public class Map {
 		return reads;
 	}
 	
+	public void translate (Waypoint newLocation) {
+		for(ReturnSet r : reads) {
+			for (LReturn l : r.getBlockages()) {
+				//TODO
+			}
+		}
+	}
 }

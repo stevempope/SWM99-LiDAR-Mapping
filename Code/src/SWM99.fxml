@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.76" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="775.0" prefWidth="1187.0" fx:controller="lidarMapping.AppController" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <Canvas height="773.0" width="897.0" />
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <Button layoutX="50.0" layoutY="150.0" minWidth="175" mnemonicParsing="false" text="Set Agent Size" 
+			onAction = "#handleSetAgentSize" />
+            <Button layoutX="50.0" layoutY="200.0" minWidth="175" mnemonicParsing="false" text="Scan Environment..."
+			onAction = "#handleSenseCall"/>
+            <Button layoutX="50.0" layoutY="250.0" minWidth="175" mnemonicParsing="false" text="Pathfind"
+			onAction =  "#handlePathfind" />
+            <Button layoutX="50.0" layoutY="300.0" minWidth="175" mnemonicParsing="false" text="Complete Run"
+			onAction = "#handleCompleteRun" />
+			<Button layoutX="50.0" layoutY="350.0" minWidth="175" mnemonicParsing="false" text="Change Algorithm"
+			onAction = "#handleAlgorithmChange" />
+            <Button layoutX="50.0" layoutY="400.0" minWidth="175" mnemonicParsing="false" text="Object Sense" 
+			onAction = "#handleBasicSense" />
+            <Button layoutX="50.0" layoutY="450.0" minWidth="175" mnemonicParsing="false" text="Amalgamate Sense" 
+			onAction = "#handleMediumSense" />
+            <Button layoutX="50.0" layoutY="500.0" minWidth="175" mnemonicParsing="false" text="Exit"
+			onAction = "#handleExit" />
+         </children>
+	</AnchorPane>
+  </items>
+</SplitPane>
