@@ -19,6 +19,7 @@ public class AppController {
 	private Waypoint dest;
 	private Path pa;
 	private int counter;
+	private int angle;
 
 	public AppController() {		
 		view = new App();
@@ -55,12 +56,24 @@ public class AppController {
 	@FXML protected void canClick(MouseEvent event) {
 		System.out.printf("Canvas height: %f, Canvas width: %f\n", mapPane.getHeight(), mapPane.getWidth());
 		System.out.printf("Click! X = %f Y = %f \n",event.getX(), event.getY());
-		System.out.println("Click!");
-		//dest.setAngle((int)Math.toDegrees(Math.atan2(Math.abs(mapPane.getHeight()/2) - event.getY(), Math.abs((mapPane.getWidth()/2) - event.getX()))));
-		//System.out.printf("%d\n", dest.getAngle());
+		angle = (int)Math.toDegrees(Math.atan2(Math.abs(mapPane.getHeight()/2) - event.getY(), Math.abs((mapPane.getWidth()/2) - event.getX())));
+		if (event.getX() < can.getWidth()/2) {
+			if (event.getY() < can.getHeight()) {
+				dest.setAngle(Math.abs(angle - 180));
+			}
+			else {
+				dest.setAngle(Math.abs(angle + 180));
+			}
+		}
+		else if (event.getY() > can.getHeight()/2){
+			dest.setAngle(Math.abs(angle + 360));
+		}
+		else {
+			dest.setAngle(angle);
+		}
+		System.out.printf("%d\n", dest.getAngle());
 		dest.setDistance ((int)(Math.sqrt(Math.abs(((can.getHeight()/2) - event.getY()) * ((can.getHeight()/2) - event.getY())) + Math.abs(((can.getWidth()/2) - event.getX()) * ((can.getWidth()/2) - event.getX())))));
 		System.out.println(dest.getDistance().toString());
-		//dest = 0;
 	}
 
 	@FXML protected void handlePathfind(ActionEvent event) {
