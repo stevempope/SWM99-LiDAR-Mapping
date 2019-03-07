@@ -49,8 +49,9 @@ public class AppController {
 			counter = 0;
 		}
 		System.out.println(event.getSource());
+		//TODO printing to the canvas
 	}
-	
+
 	@FXML AnchorPane mapPane;
 	@FXML Canvas can;
 	@FXML protected void canClick(MouseEvent event) {
@@ -77,22 +78,37 @@ public class AppController {
 	}
 
 	@FXML protected void handlePathfind(ActionEvent event) {
+		if(dest != null && m.getBlockages().size() > 0) {
+			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
+			pf.pathfind(m, dest);
+		}
+		else {
+			System.out.println("Please select a destination by clicking the Map and ensure you have called for data from the LiDAR sensor!");
+		}
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
+		//TODO must write ReturnSet Amalgamate
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleAlgorithmChange(ActionEvent event) {
+		//TODO Need to write more than 1
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
+		pr = new Processor(v, a);
+		pr.updateMap(m);
+		//TODO print result to canvas
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleMediumSense(ActionEvent event) {
+		pr = new Processor(v, a);
+		pr.smarterUpdateMap(m);
+		//TODO May need to alter this so calling multiple times move through data set
 		System.out.print(event.getSource());
 	}
 
