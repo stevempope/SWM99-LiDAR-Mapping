@@ -42,19 +42,18 @@ public class AppController {
 		a = Integer.parseInt(agentSize.getText());
 		agentSize.setText("Agent Size set to: " + a.toString());
 		System.out.println(event.getSource());
-		GraphicsContext gc = can.getGraphicsContext2D();
-		gc.setFill(Color.DARKCYAN);
-		gc.fillRect(mapPane.getWidth()/2 - a/2, mapPane.getHeight()/2 - a/2, a, a);
+		pr = new Processor(v , a);
+		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
+		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2 - a/2, mapPane.getHeight()/2 - a/2, a, a);
 	}
 
 	@FXML protected void handleSenseCall(ActionEvent event) {
-		if(counter < v.getDataSetSize()) {
-			GraphicsContext gc =  can.getGraphicsContext2D();
-			gc.setFill(Color.CORNFLOWERBLUE);
+		if(counter < v.getDataSetSize()) { 
+			can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
 			int arrPos = 0;
 			for(int i : v.sense(counter)) {
 				if (i > 0) {
-					gc.fillOval(getX(arrPos,i), getY(arrPos,i), 5, 5);
+					can.getGraphicsContext2D().fillOval(getX(arrPos,i), getY(arrPos,i), 5, 5);
 				}
 				arrPos++;
 			}
@@ -112,6 +111,7 @@ public class AppController {
 			System.out.println("Please select a destination by clicking the Map and ensure you have called for data from the LiDAR sensor!");
 		}
 		System.out.print(event.getSource());
+		//TODO Draw Path/Line to screen
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
@@ -120,21 +120,38 @@ public class AppController {
 	}
 
 	@FXML protected void handleAlgorithmChange(ActionEvent event) {
-		//TODO Need to write more than 1
+		//TODO Need to write more than 1 or deprecate
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
-		pr = new Processor(v, a);
-		pr.updateMap(m);
-		//TODO print result to canvas
+		pr.smarterUpdateMap(m);
+		drawMap(m);
 		System.out.print(event.getSource());
 	}
 
+	private void drawMap(Map theMap) {
+		can.getGraphicsContext2D().clearRect(0, 0, can.getWidth(), can.getHeight());
+		int arrPos = 0;
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
+				System.out.println(l.getBlocks());
+				can.getGraphicsContext2D().setFill(Color.CRIMSON);
+				can.getGraphicsContext2D().fillOval(getX(l.getStart(), l.getStartDist()), getY(l.getStart(), l.getStartDist()),10 , 10);
+				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
+				can.getGraphicsContext2D().fillOval(getX(l.getEnd(), l.getEndDist()), getY(l.getEnd(), l.getEndDist()),10 , 10);
+				can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
+				for(Integer i : l.getBlocks()) {
+					can.getGraphicsContext2D().fillOval(getX((arrPos + l.getStart()),i), getY((arrPos + l.getStart()),i),5,5);
+					arrPos++;
+				}
+			}
+		}
+	}
+
 	@FXML protected void handleMediumSense(ActionEvent event) {
-		pr = new Processor(v, a);
 		pr.smarterUpdateMap(m);
-		//TODO May need to alter this so calling multiple times move through data set
+		drawMap(m);
 		System.out.print(event.getSource());
 	}
 
