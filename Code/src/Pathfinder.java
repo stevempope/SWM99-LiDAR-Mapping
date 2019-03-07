@@ -66,7 +66,6 @@ public class Pathfinder {
 			//TODO what if there is no valid path?
 		}
 		System.out.printf("angle = %s, distance = %d \n",thePath.getPath().get(0).getAngle(), thePath.getPath().get(0).getDistance());
-		
 		return thePath;
 	}
 

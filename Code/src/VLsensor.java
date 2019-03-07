@@ -85,5 +85,9 @@ public class VLsensor {
 	public Orientation getOrientation() {
 		return myOrientation;
 	}
+	
+	public int getDataSetSize() {
+		return res.size();
+	}
 
 }
