@@ -5,9 +5,12 @@ import java.util.Arrays;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 public class AppController {
 
 	private App view;
@@ -31,17 +34,31 @@ public class AppController {
 		dest = new Waypoint();
 		counter = 0;
 	}
-
+	@FXML AnchorPane mapPane;
+	@FXML Canvas can;
 	@FXML TextField agentSize;
+
 	@FXML protected void handleSetAgentSize(ActionEvent event) {
 		a = Integer.parseInt(agentSize.getText());
 		agentSize.setText("Agent Size set to: " + a.toString());
 		System.out.println(event.getSource());
+		GraphicsContext gc = can.getGraphicsContext2D();
+		gc.setFill(Color.DARKCYAN);
+		gc.fillRect(mapPane.getWidth()/2 - a/2, mapPane.getHeight()/2 - a/2, a, a);
 	}
 
 	@FXML protected void handleSenseCall(ActionEvent event) {
 		if(counter < v.getDataSetSize()) {
-			System.out.printf("%s \n",Arrays.toString(v.sense(counter)));
+			GraphicsContext gc =  can.getGraphicsContext2D();
+			gc.setFill(Color.CORNFLOWERBLUE);
+			int arrPos = 0;
+			for(int i : v.sense(counter)) {
+				if (i > 0) {
+					gc.fillOval(getX(arrPos,i), getY(arrPos,i), 5, 5);
+				}
+				arrPos++;
+			}
+			//System.out.printf("%s \n",Arrays.toString(v.sense(counter)));
 			counter++;
 		}
 		else {
@@ -52,8 +69,17 @@ public class AppController {
 		//TODO printing to the canvas
 	}
 
-	@FXML AnchorPane mapPane;
-	@FXML Canvas can;
+	private double getY(int angle, int dist) {
+		if (v.getOrientation() == Orientation.antiClockwise) {
+			return (-dist * (Math.sin(Math.toRadians(angle)))) + mapPane.getHeight()/2;
+		}
+		else return (dist * (Math.sin(Math.toRadians(angle)))) + mapPane.getHeight()/2;
+	}
+
+	private double getX(int angle, int dist) {
+		return (dist * (Math.cos(Math.toRadians(angle)))) + mapPane.getWidth()/2;
+	}
+
 	@FXML protected void canClick(MouseEvent event) {
 		System.out.printf("Canvas height: %f, Canvas width: %f\n", mapPane.getHeight(), mapPane.getWidth());
 		System.out.printf("Click! X = %f Y = %f \n",event.getX(), event.getY());
