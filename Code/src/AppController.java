@@ -1,16 +1,12 @@
 package lidarMapping;
 
-import java.util.Arrays;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 public class AppController {
 
 	private App view;
@@ -105,13 +101,16 @@ public class AppController {
 	@FXML protected void handlePathfind(ActionEvent event) {
 		if(dest != null && m.getBlockages().size() > 0) {
 			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
-			pf.pathfind(m, dest);
+			pa = pf.pathfind(m, dest);
+			can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
+			can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2,mapPane.getHeight()/2 , getX(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()), getY(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()));
+			//TODO refactor to agent position and for multiple waypoints in a path
 		}
 		else {
 			System.out.println("Please select a destination by clicking the Map and ensure you have called for data from the LiDAR sensor!");
 		}
 		System.out.print(event.getSource());
-		//TODO Draw Path/Line to screen
+		
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
@@ -125,7 +124,7 @@ public class AppController {
 	}
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
-		pr.smarterUpdateMap(m);
+		pr.updateMap(m);
 		drawMap(m);
 		System.out.print(event.getSource());
 	}
