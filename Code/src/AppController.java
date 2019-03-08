@@ -1,13 +1,12 @@
 package lidarMapping;
 
-import java.util.Arrays;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 public class AppController {
 
 	private App view;
@@ -31,17 +30,30 @@ public class AppController {
 		dest = new Waypoint();
 		counter = 0;
 	}
-
+	@FXML AnchorPane mapPane;
+	@FXML Canvas can;
 	@FXML TextField agentSize;
+
 	@FXML protected void handleSetAgentSize(ActionEvent event) {
 		a = Integer.parseInt(agentSize.getText());
 		agentSize.setText("Agent Size set to: " + a.toString());
 		System.out.println(event.getSource());
+		pr = new Processor(v , a);
+		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
+		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2 - a/2, mapPane.getHeight()/2 - a/2, a, a);
 	}
 
 	@FXML protected void handleSenseCall(ActionEvent event) {
-		if(counter < v.getDataSetSize()) {
-			System.out.printf("%s \n",Arrays.toString(v.sense(counter)));
+		if(counter < v.getDataSetSize()) { 
+			can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
+			int arrPos = 0;
+			for(int i : v.sense(counter)) {
+				if (i > 0) {
+					can.getGraphicsContext2D().fillOval(getX(arrPos,i), getY(arrPos,i), 5, 5);
+				}
+				arrPos++;
+			}
+			//System.out.printf("%s \n",Arrays.toString(v.sense(counter)));
 			counter++;
 		}
 		else {
@@ -52,8 +64,17 @@ public class AppController {
 		//TODO printing to the canvas
 	}
 
-	@FXML AnchorPane mapPane;
-	@FXML Canvas can;
+	private double getY(int angle, int dist) {
+		if (v.getOrientation() == Orientation.antiClockwise) {
+			return (-dist * (Math.sin(Math.toRadians(angle)))) + mapPane.getHeight()/2;
+		}
+		else return (dist * (Math.sin(Math.toRadians(angle)))) + mapPane.getHeight()/2;
+	}
+
+	private double getX(int angle, int dist) {
+		return (dist * (Math.cos(Math.toRadians(angle)))) + mapPane.getWidth()/2;
+	}
+
 	@FXML protected void canClick(MouseEvent event) {
 		System.out.printf("Canvas height: %f, Canvas width: %f\n", mapPane.getHeight(), mapPane.getWidth());
 		System.out.printf("Click! X = %f Y = %f \n",event.getX(), event.getY());
@@ -80,12 +101,16 @@ public class AppController {
 	@FXML protected void handlePathfind(ActionEvent event) {
 		if(dest != null && m.getBlockages().size() > 0) {
 			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
-			pf.pathfind(m, dest);
+			pa = pf.pathfind(m, dest);
+			can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
+			can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2,mapPane.getHeight()/2 , getX(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()), getY(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()));
+			//TODO refactor to agent position and for multiple waypoints in a path
 		}
 		else {
 			System.out.println("Please select a destination by clicking the Map and ensure you have called for data from the LiDAR sensor!");
 		}
 		System.out.print(event.getSource());
+		
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
@@ -94,21 +119,38 @@ public class AppController {
 	}
 
 	@FXML protected void handleAlgorithmChange(ActionEvent event) {
-		//TODO Need to write more than 1
+		//TODO Need to write more than 1 or deprecate
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
-		pr = new Processor(v, a);
 		pr.updateMap(m);
-		//TODO print result to canvas
+		drawMap(m);
 		System.out.print(event.getSource());
 	}
 
+	private void drawMap(Map theMap) {
+		can.getGraphicsContext2D().clearRect(0, 0, can.getWidth(), can.getHeight());
+		int arrPos = 0;
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
+				System.out.println(l.getBlocks());
+				can.getGraphicsContext2D().setFill(Color.CRIMSON);
+				can.getGraphicsContext2D().fillOval(getX(l.getStart(), l.getStartDist()), getY(l.getStart(), l.getStartDist()),10 , 10);
+				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
+				can.getGraphicsContext2D().fillOval(getX(l.getEnd(), l.getEndDist()), getY(l.getEnd(), l.getEndDist()),10 , 10);
+				can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
+				for(Integer i : l.getBlocks()) {
+					can.getGraphicsContext2D().fillOval(getX((arrPos + l.getStart()),i), getY((arrPos + l.getStart()),i),5,5);
+					arrPos++;
+				}
+			}
+		}
+	}
+
 	@FXML protected void handleMediumSense(ActionEvent event) {
-		pr = new Processor(v, a);
 		pr.smarterUpdateMap(m);
-		//TODO May need to alter this so calling multiple times move through data set
+		drawMap(m);
 		System.out.print(event.getSource());
 	}
 
