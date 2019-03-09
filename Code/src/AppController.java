@@ -96,6 +96,14 @@ public class AppController {
 		System.out.printf("%d\n", dest.getAngle());
 		dest.setDistance ((int)(Math.sqrt(Math.abs(((can.getHeight()/2) - event.getY()) * ((can.getHeight()/2) - event.getY())) + Math.abs(((can.getWidth()/2) - event.getX()) * ((can.getWidth()/2) - event.getX())))));
 		System.out.println(dest.getDistance().toString());
+		drawDest();
+	}
+
+	private void drawDest() {
+		if (dest != null) {
+			can.getGraphicsContext2D().setFill(Color.CHARTREUSE);
+			can.getGraphicsContext2D().fillOval(getX(dest.getAngle(), dest.getDistance()), getY(dest.getAngle(), dest.getDistance()), 10, 10);
+		}
 	}
 
 	@FXML protected void handlePathfind(ActionEvent event) {
