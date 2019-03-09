@@ -7,17 +7,19 @@ import java.util.ArrayList;
  * This allows input from multiple sensors to exist in the same space.
  * 
  * @author Stephen Pope 15836791
- * @version 0.2
+ * @version 0.3
  *
  */
 public class Map {
 	private ArrayList<ReturnSet> reads;
+	private Waypoint translation;
 	
 	/**
 	 * Map constructor - initialises storage ready for a LiDAR return
 	 */
 	public Map() {
-		reads = new ArrayList<ReturnSet>();		
+		reads = new ArrayList<ReturnSet>();	
+		translation = new Waypoint(0,0);
 	}
 	
 	/**
@@ -47,10 +49,16 @@ public class Map {
 	}
 	
 	public void translate (Waypoint newLocation) {
+		
 		for(ReturnSet r : reads) {
 			for (LReturn l : r.getBlockages()) {
 				//TODO
 			}
 		}
 	}
+	
+	public Waypoint getTranslation() {
+		return translation;
+	}
+	
 }

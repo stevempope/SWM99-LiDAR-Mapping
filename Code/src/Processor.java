@@ -56,6 +56,15 @@ public class Processor {
 		theMap.addScan(theResultSet);
 	}
 
+	public void fullUpdateMap(Map theMap) {
+		theResultSet = new ReturnSet(theSensor.getOrientation());
+		theResultSet = scanEnvironment(theResultSet);
+		theResultSet = blockageAmalgamation(theResultSet);
+		theMap.addScan(theResultSet);
+		theMap = totalMerge(theMap);
+
+	}
+
 	/**
 	 * The core logic of a processor.
 	 * There are some major conditions we consider when looking at the environment:
@@ -200,6 +209,18 @@ public class Processor {
 			temp.addBlockage(n);
 		}
 		return temp;	
+	}
+
+	public Map totalMerge (Map m ) {
+		Map newMap = m;
+		for(ReturnSet r : m.getBlockages()) {
+			for(LReturn l: r.getBlockages()) {
+				
+			//Compare to all lreturns from other
+			//How to 
+			}
+		}
+		return newMap;
 	}
 }
 

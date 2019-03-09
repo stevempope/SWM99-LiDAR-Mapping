@@ -64,7 +64,6 @@ public class AppController {
 			counter = 0;
 		}
 		System.out.println(event.getSource());
-		//TODO printing to the canvas
 	}
 
 	private double getY(int angle, int dist) {
