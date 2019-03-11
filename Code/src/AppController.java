@@ -43,16 +43,16 @@ public class AppController {
 	@FXML TextField agentSize;
 
 	@FXML protected void handleSetAgentSize(ActionEvent event) {
-		theAgent.setSize(Integer.parseInt(agentSize.getText()));
-		agentSize.setText("Agent Size set to: " + theAgent.getSize().toString());
-		System.out.println(event.getSource());
-		pr = new Processor(v , theAgent.getSize());
-		drawAgent();
-	}
-
-	private void drawAgent() {
-		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
-		can.getGraphicsContext2D().fillRect(getX(theAgent.getPosition().getAngle(), theAgent.getPosition().getDistance()), getY(theAgent.getPosition().getAngle(), theAgent.getPosition().getDistance()) , theAgent.getSize(), theAgent.getSize());	
+		Integer size = Integer.parseInt(agentSize.getText());
+		if (size > 0) {
+			theAgent.setSize(size);
+			agentSize.setText("Agent Size set to: " + theAgent.getSize().toString());
+			System.out.println(event.getSource());
+			pr = new Processor(v , theAgent.getSize());
+			paint();
+		}
+		else System.out.printf("Sorry, you selected an invalid agent size! - Perhaps choose one greater than 0?");
+		
 	}
 
 	@FXML protected void handleSenseCall(ActionEvent event) {
@@ -185,7 +185,10 @@ public class AppController {
 	}
 	
 	@FXML private void handleAgentToggle() {
-		agentToggle = !agentToggle;
+		if (agentToggle ==  true) {
+			agentToggle = false;
+		}
+		else agentToggle = true;
 		paint();
 	}
 	
@@ -199,6 +202,14 @@ public class AppController {
 		paint();
 	}
 	private void paint() {
+		can.getGraphicsContext2D().clearRect(0, 0, can.getWidth(), can.getHeight());
+		if (agentToggle == true) {
+			System.out.println("AGENT TRUE");
+			CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
+			can.getGraphicsContext2D().setFill(Color.DARKCYAN);
+			can.getGraphicsContext2D().fillRect(agentPos.getX() + (mapPane.getWidth()/2), agentPos.getY() + (mapPane.getHeight()/2), theAgent.getSize(), theAgent.getSize());
+		}
 		//Paint depending on the values
 	}
+	
 }
