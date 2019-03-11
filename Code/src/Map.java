@@ -48,15 +48,38 @@ public class Map {
 		return reads;
 	}
 	
-	public void translate (Waypoint newLocation) {
-		
-		for(ReturnSet r : reads) {
-			for (LReturn l : r.getBlockages()) {
-				//TODO
+	public void transformMap (Waypoint newLocation) {
+		CartesianPair prev = new CartesianPair(translation);
+		CartesianPair curr = new CartesianPair(newLocation);
+		CartesianPair diff = new CartesianPair();
+		diff.setX(prev.getX() - curr.getX());
+		diff.setY(prev.getY() - curr.getY());
+		for (ReturnSet r : getBlockages()) {
+			for(LReturn l : r.getBlockages()) {
+				l = transformDist(l, diff, newLocation.getAngle());
 			}
 		}
 	}
 	
+	public LReturn transformDist (LReturn l, CartesianPair transformation, Integer ang) {
+		Integer pos = 0;
+		Waypoint w = new Waypoint();
+		for (Integer d : l.getBlocks()) {
+			w.setAngle(l.getStart() + pos);
+			w.setDistance(d);
+			CartesianPair c = new CartesianPair(w);
+			c.setX(c.getX() + transformation.getX());
+			c.setY(c.getY() + transformation.getY());
+			Waypoint z = new Waypoint(c);
+			d = z.getDistance();
+			pos++;
+		}
+		l.setStart((l.getStart() + ang) % 360);
+		l.setEnd((l.getEnd() + ang) % 360);
+		return l;
+	}
+
+
 	public Waypoint getTranslation() {
 		return translation;
 	}
