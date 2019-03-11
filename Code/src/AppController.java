@@ -31,7 +31,7 @@ public class AppController {
 		m = new Map();
 		pf = new Pathfinder();
 		pa = new Path();
-		dest = new Waypoint();
+		dest = new Waypoint(0,0);
 		counter = 0;
 		theAgent = new Agent();
 		lidarToggle = false;
@@ -106,23 +106,14 @@ public class AppController {
 		System.out.printf("%d\n", dest.getAngle());
 		dest.setDistance ((int)(Math.sqrt(Math.abs(((can.getHeight()/2) - event.getY()) * ((can.getHeight()/2) - event.getY())) + Math.abs(((can.getWidth()/2) - event.getX()) * ((can.getWidth()/2) - event.getX())))));
 		System.out.println(dest.getDistance().toString());
-		drawDest();
-	}
-
-	private void drawDest() {
-		if (dest != null) {
-			can.getGraphicsContext2D().setFill(Color.CHARTREUSE);
-			can.getGraphicsContext2D().fillOval(getX(dest.getAngle(), dest.getDistance()), getY(dest.getAngle(), dest.getDistance()), 10, 10);
-		}
+		paint();
 	}
 
 	@FXML protected void handlePathfind(ActionEvent event) {
 		if(dest != null && m.getBlockages().size() > 0) {
 			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
 			pa = pf.pathfind(m, dest);
-			can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
-			can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2,mapPane.getHeight()/2 , getX(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()), getY(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()));
-			//TODO refactor to agent position and for multiple waypoints in a path
+			paint();
 		}
 		else {
 			System.out.println("Please select a destination by clicking the Map and ensure you have called for data from the LiDAR sensor!");
@@ -204,12 +195,35 @@ public class AppController {
 	private void paint() {
 		can.getGraphicsContext2D().clearRect(0, 0, can.getWidth(), can.getHeight());
 		if (agentToggle == true) {
-			System.out.println("AGENT TRUE");
-			CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
-			can.getGraphicsContext2D().setFill(Color.DARKCYAN);
-			can.getGraphicsContext2D().fillRect(agentPos.getX() + (mapPane.getWidth()/2), agentPos.getY() + (mapPane.getHeight()/2), theAgent.getSize(), theAgent.getSize());
+			drawAgent();
+		}
+		if (destinationToggle == true) {
+			drawDest();
+		}
+		if (pathToggle == true) {
+			drawPath();
 		}
 		//Paint depending on the values
+	}
+	
+	private void drawAgent() {
+		CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
+		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
+		can.getGraphicsContext2D().fillRect(agentPos.getX() + (mapPane.getWidth()/2), agentPos.getY() + (mapPane.getHeight()/2), theAgent.getSize(), theAgent.getSize());
+	}
+	
+	private void drawDest() {
+		if (dest != null) {
+			CartesianPair destXY = new CartesianPair(dest);
+			can.getGraphicsContext2D().setFill(Color.CHARTREUSE);
+			can.getGraphicsContext2D().fillOval(mapPane.getWidth()/2  + destXY.getX(),mapPane.getHeight()/2 - destXY.getY(), 10, 10);
+		}
+	}
+	
+	private void drawPath() {
+		can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
+		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2,mapPane.getHeight()/2 , getX(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()), getY(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()));
+		//TODO refactor to agent position and for multiple waypoints in a path
 	}
 	
 }
