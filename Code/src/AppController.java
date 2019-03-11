@@ -24,6 +24,8 @@ public class AppController {
 	private boolean agentToggle;
 	private boolean destinationToggle;
 	private boolean pathToggle;
+	private Integer [] tempSense;
+	private boolean hasMap;
 
 	public AppController() {		
 		view = new App();
@@ -37,6 +39,7 @@ public class AppController {
 		lidarToggle = false;
 		agentToggle = false;
 		destinationToggle = false;
+		hasMap = false;
 	}
 	@FXML AnchorPane mapPane;
 	@FXML Canvas can;
@@ -56,16 +59,9 @@ public class AppController {
 	}
 
 	@FXML protected void handleSenseCall(ActionEvent event) {
-		if(counter < v.getDataSetSize()) { 
-			can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
-			int arrPos = 0;
-			for(int i : v.sense(counter)) {
-				if (i > 0) {
-					can.getGraphicsContext2D().fillOval(getX(arrPos,i), getY(arrPos,i), 5, 5);
-				}
-				arrPos++;
-			}
-			counter++;
+		if(counter < v.getDataSetSize()) {
+			tempSense = v.sense(counter);
+			paint();
 		}
 		else {
 			System.out.printf("Sorry, no more returns in the set...Returning to original \n");
@@ -113,6 +109,7 @@ public class AppController {
 		if(dest != null && m.getBlockages().size() > 0) {
 			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
 			pa = pf.pathfind(m, dest);
+			hasMap = true;
 			paint();
 		}
 		else {
@@ -140,24 +137,6 @@ public class AppController {
 		System.out.print(event.getSource());
 	}
 
-	private void drawMap(Map theMap) {
-		can.getGraphicsContext2D().clearRect(0, 0, can.getWidth(), can.getHeight());
-		int arrPos = 0;
-		for(ReturnSet r : m.getBlockages()) {
-			for (LReturn l: r.getBlockages()) {
-				System.out.println(l.getBlocks());
-				can.getGraphicsContext2D().setFill(Color.CRIMSON);
-				can.getGraphicsContext2D().fillOval(getX(l.getStart(), l.getStartDist()), getY(l.getStart(), l.getStartDist()),10 , 10);
-				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
-				can.getGraphicsContext2D().fillOval(getX(l.getEnd(), l.getEndDist()), getY(l.getEnd(), l.getEndDist()),10 , 10);
-				can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
-				for(Integer i : l.getBlocks()) {
-					can.getGraphicsContext2D().fillOval(getX((arrPos + l.getStart()),i), getY((arrPos + l.getStart()),i),5,5);
-					arrPos++;
-				}
-			}
-		}
-	}
 
 	@FXML protected void handleMediumSense(ActionEvent event) {
 		pr.smarterUpdateMap(m);
@@ -194,14 +173,21 @@ public class AppController {
 	}
 	private void paint() {
 		can.getGraphicsContext2D().clearRect(0, 0, can.getWidth(), can.getHeight());
-		if (agentToggle == true) {
+		if (agentToggle) {
 			drawAgent();
 		}
-		if (destinationToggle == true) {
+		if (destinationToggle) {
 			drawDest();
 		}
-		if (pathToggle == true) {
+		if (pathToggle) {
 			drawPath();
+		}
+		if (lidarToggle) {
+			drawSense();
+		}
+		if(hasMap) {
+			drawMap();
+			//Must add a toggle for this layer!
 		}
 		//Paint depending on the values
 	}
@@ -224,6 +210,36 @@ public class AppController {
 		can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
 		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2,mapPane.getHeight()/2 , getX(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()), getY(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()));
 		//TODO refactor to agent position and for multiple waypoints in a path
+	}
+	
+	private void drawSense() {
+		can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
+		int arrPos = 0;
+		for(int i : tempSense) {
+			if (i > 0) {
+				can.getGraphicsContext2D().fillOval(getX(arrPos,i), getY(arrPos,i), 5, 5);
+			}
+			arrPos++;
+		}
+		counter++;		
+	}
+	
+	private void drawMap() {
+		int arrPos = 0;
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
+				System.out.println(l.getBlocks());
+				can.getGraphicsContext2D().setFill(Color.CRIMSON);
+				can.getGraphicsContext2D().fillOval(getX(l.getStart(), l.getStartDist()), getY(l.getStart(), l.getStartDist()),10 , 10);
+				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
+				can.getGraphicsContext2D().fillOval(getX(l.getEnd(), l.getEndDist()), getY(l.getEnd(), l.getEndDist()),10 , 10);
+				can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
+				for(Integer i : l.getBlocks()) {
+					can.getGraphicsContext2D().fillOval(getX((arrPos + l.getStart()),i), getY((arrPos + l.getStart()),i),5,5);
+					arrPos++;
+				}
+			}
+		}
 	}
 	
 }
