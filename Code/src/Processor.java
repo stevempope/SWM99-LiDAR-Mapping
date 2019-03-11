@@ -56,14 +56,14 @@ public class Processor {
 		theMap.addScan(theResultSet);
 	}
 
-	public void fullUpdateMap(Map theMap) {
+/*	public void fullUpdateMap(Map theMap) {
 		theResultSet = new ReturnSet(theSensor.getOrientation());
 		theResultSet = scanEnvironment(theResultSet);
 		theResultSet = blockageAmalgamation(theResultSet);
 		theMap.addScan(theResultSet);
 		theMap = totalMerge(theMap);
 
-	}
+	}*/
 
 	/**
 	 * The core logic of a processor.
@@ -211,7 +211,7 @@ public class Processor {
 		return temp;	
 	}
 
-	public Map totalMerge (Map m ) {
+/*	public Map totalMerge (Map m ) {
 		Map newMap = m;
 		for(ReturnSet r : m.getBlockages()) {
 			for(LReturn l: r.getBlockages()) {
@@ -221,7 +221,7 @@ public class Processor {
 			}
 		}
 		return newMap;
-	}
+	}*/
 }
 
 
