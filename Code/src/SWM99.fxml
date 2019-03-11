@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -7,14 +8,14 @@
 
 <SplitPane dividerPositions="0.76" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="775.0" prefWidth="1187.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lidarMapping.AppController">
   <items>
-    <AnchorPane fx:id = "mapPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+    <AnchorPane fx:id="mapPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
-            <Canvas fx:id = "can" onMouseClicked = "#canClick" height="775.0" width="900.0" />
+            <Canvas fx:id="can" height="775.0" onMouseClicked="#canClick" width="900.0" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
             <Button layoutX="50.0" layoutY="100.0" minWidth="175" mnemonicParsing="false" onAction="#handleSetAgentSize" text="Set Agent Size" />
-			<TextField fx:id = "agentSize" layoutX="50.0" layoutY="150.0" prefHeight="31.0" prefWidth="175.0" promptText="Agent Size in mm" />
+			<TextField fx:id="agentSize" layoutX="50.0" layoutY="150.0" prefHeight="31.0" prefWidth="175.0" promptText="Agent Size in mm" />
             <Button layoutX="50.0" layoutY="200.0" minWidth="175" mnemonicParsing="false" onAction="#handleSenseCall" text="Scan Environment..." />
             <Button layoutX="50.0" layoutY="250.0" minWidth="175" mnemonicParsing="false" onAction="#handlePathfind" text="Pathfind" />
             <Button layoutX="50.0" layoutY="300.0" minWidth="175" mnemonicParsing="false" onAction="#handleCompleteRun" text="Complete Run" />

@@ -11,7 +11,6 @@ public class AppController {
 
 	private App view;
 	private VLsensor v;
-	private Integer a;
 	private Map m;
 	private Processor pr;
 	private Pathfinder pf;
@@ -19,28 +18,33 @@ public class AppController {
 	private Path pa;
 	private int counter;
 	private int angle;
+	private Agent theAgent;
 
 	public AppController() {		
 		view = new App();
 		v = new VLsensor(Orientation.antiClockwise);
-		a = 10;
 		m = new Map();
 		pf = new Pathfinder();
 		pa = new Path();
 		dest = new Waypoint();
 		counter = 0;
+		theAgent = new Agent();
 	}
 	@FXML AnchorPane mapPane;
 	@FXML Canvas can;
 	@FXML TextField agentSize;
 
 	@FXML protected void handleSetAgentSize(ActionEvent event) {
-		a = Integer.parseInt(agentSize.getText());
-		agentSize.setText("Agent Size set to: " + a.toString());
+		theAgent.setSize(Integer.parseInt(agentSize.getText()));
+		agentSize.setText("Agent Size set to: " + theAgent.getSize().toString());
 		System.out.println(event.getSource());
-		pr = new Processor(v , a);
+		pr = new Processor(v , theAgent.getSize());
+		drawAgent();
+	}
+
+	private void drawAgent() {
 		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
-		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2 - a/2, mapPane.getHeight()/2 - a/2, a, a);
+		can.getGraphicsContext2D().fillRect(getX(theAgent.getPosition().getAngle(), theAgent.getPosition().getDistance()), getY(theAgent.getPosition().getAngle(), theAgent.getPosition().getDistance()) , theAgent.getSize(), theAgent.getSize());	
 	}
 
 	@FXML protected void handleSenseCall(ActionEvent event) {
@@ -53,7 +57,6 @@ public class AppController {
 				}
 				arrPos++;
 			}
-			//System.out.printf("%s \n",Arrays.toString(v.sense(counter)));
 			counter++;
 		}
 		else {
@@ -61,7 +64,6 @@ public class AppController {
 			counter = 0;
 		}
 		System.out.println(event.getSource());
-		//TODO printing to the canvas
 	}
 
 	private double getY(int angle, int dist) {
