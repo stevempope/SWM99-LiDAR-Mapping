@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -19,6 +20,10 @@ public class AppController {
 	private int counter;
 	private int angle;
 	private Agent theAgent;
+	private boolean lidarToggle;
+	private boolean agentToggle;
+	private boolean destinationToggle;
+	private boolean pathToggle;
 
 	public AppController() {		
 		view = new App();
@@ -29,6 +34,9 @@ public class AppController {
 		dest = new Waypoint();
 		counter = 0;
 		theAgent = new Agent();
+		lidarToggle = false;
+		agentToggle = false;
+		destinationToggle = false;
 	}
 	@FXML AnchorPane mapPane;
 	@FXML Canvas can;
@@ -125,17 +133,19 @@ public class AppController {
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
 		//TODO must write ReturnSet Amalgamate
+		paint();
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleAlgorithmChange(ActionEvent event) {
 		//TODO Need to write more than 1 or deprecate
+		paint();
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
 		pr.updateMap(m);
-		drawMap(m);
+		paint();
 		System.out.print(event.getSource());
 	}
 
@@ -160,11 +170,35 @@ public class AppController {
 
 	@FXML protected void handleMediumSense(ActionEvent event) {
 		pr.smarterUpdateMap(m);
-		drawMap(m);
+		paint();
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleExit(ActionEvent event) {
 		System.exit(0);
+	}
+	
+	@FXML private void handleLiDARToggle(ActionEvent event) {
+		lidarToggle = !lidarToggle;
+		System.out.println(lidarToggle);
+		paint();
+	}
+	
+	@FXML private void handleAgentToggle() {
+		agentToggle = !agentToggle;
+		paint();
+	}
+	
+	@FXML private void handleDestinationToggle() {
+		destinationToggle = !destinationToggle;
+		paint();
+	}
+	
+	@FXML private void handlePathToggle() {
+		pathToggle = !pathToggle;
+		paint();
+	}
+	private void paint() {
+		//Paint depending on the values
 	}
 }
