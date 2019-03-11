@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * This allows input from multiple sensors to exist in the same space.
  * 
  * @author Stephen Pope 15836791
- * @version 0.3
+ * @version 0.4
  *
  */
 public class Map {
@@ -48,6 +48,16 @@ public class Map {
 		return reads;
 	}
 	
+	/**
+	 * Transforms the existing Map.
+	 * 
+	 * When an agent moves from their point of origin and takes a new scan, the data we have existing in the map must be transformed so that it reflects
+	 * its "real" location in the world (relative to our current location)
+	 * 
+	 * This method iterates through each LiDAR return and calls the transform method.
+	 * 
+	 * @param newLocation - the angle and distance our map data is now offset by.
+	 */
 	public void transformMap (Waypoint newLocation) {
 		CartesianPair prev = new CartesianPair(translation);
 		CartesianPair curr = new CartesianPair(newLocation);
@@ -59,8 +69,20 @@ public class Map {
 				l = transformDist(l, diff, newLocation.getAngle());
 			}
 		}
+		translation = new Waypoint(curr);
 	}
 	
+	/**
+	 * Transforms a single LReturn.
+	 * 
+	 * We convert to a Waypoint and then a Cartesian Pair (Which naturally generates our current XY).
+	 * We then convert back to a Waypoint (The constructors convert between XY and AD) and extract the distance value of the return.
+	 * The angle is a simple addition and modulus divide by 360 to get the amount the angle will change by.
+	 * @param l - our LReturn
+	 * @param transformation -  the XY pair representing the difference between our current and last position.
+	 * @param ang -  the angle we are now facing at our current location
+	 * @return the transformed LReturn
+	 */
 	public LReturn transformDist (LReturn l, CartesianPair transformation, Integer ang) {
 		Integer pos = 0;
 		Waypoint w = new Waypoint();
