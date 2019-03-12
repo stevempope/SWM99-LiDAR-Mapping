@@ -26,6 +26,11 @@ public class Waypoint {
 		theDistance = d;
 	}
 	
+	public Waypoint (CartesianPair p) {
+		theAngle = (int) Math.toDegrees(Math.atan2(p.getY(), p.getX()));
+		theDistance = (int)(Math.sqrt((p.getY() * p.getY()) + (p.getX() * p.getX())));
+	}
+	
 	/**
 	 * Gets the angle of the Waypoint
 	 * @return The integer angle
