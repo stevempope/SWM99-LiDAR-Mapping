@@ -23,10 +23,11 @@
             <Button layoutX="50.0" layoutY="400.0" minWidth="175" mnemonicParsing="false" onAction="#handleBasicSense" text="Object Sense" />
             <Button layoutX="50.0" layoutY="450.0" minWidth="175" mnemonicParsing="false" onAction="#handleMediumSense" text="Amalgamate Sense" />
             <Button layoutX="50.0" layoutY="500.0" minWidth="175" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
-            <ToggleButton layoutX="50.0" layoutY="553.0" mnemonicParsing="false" text="LiDAR" onAction="#handleLiDARToggle" />
-            <ToggleButton layoutX="123.0" layoutY="553.0" mnemonicParsing="false" text="Agent" onAction="#handleAgentToggle" />
-            <ToggleButton layoutX="50.0" layoutY="596.0" mnemonicParsing="false" text="Destination" onAction="#handleDestinationToggle" />
-            <ToggleButton layoutX="153.0" layoutY="596.0" mnemonicParsing="false" text="Path" onAction="#handlePathToggle" />
+            <ToggleButton layoutX="50.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleLiDARToggle" text="LiDAR" />
+            <ToggleButton layoutX="123.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleAgentToggle" text="Agent" />
+            <ToggleButton layoutX="50.0" layoutY="596.0" mnemonicParsing="false" onAction="#handleDestinationToggle" text="Destination" />
+            <ToggleButton layoutX="153.0" layoutY="596.0" mnemonicParsing="false" onAction="#handlePathToggle" text="Path" />
+            <Button layoutX="50.0" layoutY="651.0" mnemonicParsing="false" text="Drive" onAction = "#handleDrive" />
          </children>
 	</AnchorPane>
   </items>
