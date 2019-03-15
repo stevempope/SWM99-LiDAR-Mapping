@@ -20,7 +20,7 @@ public class Processor {
 	private VLsensor theSensor;
 	private ReturnSet theResultSet;
 	private Integer counter;
-	private Integer agentSize;
+	private Agent theAgent;
 
 	/**
 	 * Deprecated?
@@ -33,9 +33,9 @@ public class Processor {
 	 * @param vls - the Virtual LiDAR sensor we will recieve input from
 	 * @param size - The size of the pathfinding agent
 	 */
-	public Processor (VLsensor vls, Integer size) {
+	public Processor (VLsensor vls, Agent a) {
 		counter = 0;
-		agentSize =  size;
+		theAgent =  a;
 		theSensor = vls;
 	}
 
@@ -99,7 +99,7 @@ public class Processor {
 				if (blockage.getStart() == null) {
 					blockage.setStart(temp);
 				}
-				else if (Math.abs(i - prev) > agentSize) {
+				else if (Math.abs(i - prev) > theAgent.getSize()) {
 					blockage.setEnd(temp -1);
 					retSet.addBlockage(blockage);
 					blockage = new LReturn();
@@ -188,7 +188,7 @@ public class Processor {
 					zeros--;
 				}
 				zeros = 0;
-				if (cosRule >= agentSize) {
+				if (cosRule >= theAgent.getSize()) {
 					scratch.addBlockage(l);
 				}
 				else {

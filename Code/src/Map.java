@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Map {
 	private ArrayList<ReturnSet> reads;
-	private Waypoint translation;
+	private Waypoint translation; //deprecate as the ReturnSet will do this depending on its offset
 	
 	/**
 	 * Map constructor - initialises storage ready for a LiDAR return

@@ -60,7 +60,7 @@ public class AppController {
 			theAgent.setSize(size);
 			agentSize.setText("Agent Size set to: " + theAgent.getSize().toString());
 			System.out.println(event.getSource());
-			pr = new Processor(v , theAgent.getSize());
+			pr = new Processor(v , theAgent);
 			paint();
 		}
 		else System.out.printf("Sorry, you selected an invalid agent size! - Perhaps choose one greater than 0?");
@@ -121,7 +121,9 @@ public class AppController {
 		if (dest.getAngle() != 0 && dest.getDistance() != 0) {
 			if (tempSense !=  null) {
 				if(pa.getPath().size() > 0) {
-					theAgent.setPosition(pa.popNextWaypoint());
+					Waypoint next = pa.popNextWaypoint();
+					theAgent.setPosition(next);
+					m.transformMap(next);
 					paint();
 				}
 				else {

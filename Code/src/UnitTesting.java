@@ -215,9 +215,8 @@ public class UnitTesting {
 	@Test
 	public void ProcessorTest() {
 		VLsensor sensor = new VLsensor();
-		Integer agentSize = 10;
 		Map theMap = new Map();
-		Processor tp = new Processor(sensor, agentSize);
+		Processor tp = new Processor(sensor, new Agent());
 		
 		tp.updateMap(theMap);
 		
@@ -250,7 +249,7 @@ public class UnitTesting {
 		assertTrue(theMap.getBlockages().get(2).getBlockages().size() == 7);
 		
 		sensor = new VLsensor(Orientation.clockwise);
-		tp =  new Processor(sensor,agentSize);
+		tp =  new Processor(sensor,new Agent());
 		
 		tp.updateMap(theMap);
 		
@@ -289,7 +288,7 @@ public class UnitTesting {
 		
 		sensor = new VLsensor(Orientation.antiClockwise);
 		theMap = new Map();
-		tp = new Processor(sensor, agentSize);
+		tp = new Processor(sensor, new Agent());
 		
 		tp.smarterUpdateMap(theMap);
 		
@@ -322,9 +321,8 @@ public class UnitTesting {
 	@Test
 	public void pathfindingTest() {
 		VLsensor sensor = new VLsensor(Orientation.antiClockwise);
-		Integer agentSize = 10;
 		Map theMap = new Map();
-		Processor tp = new Processor(sensor, agentSize);
+		Processor tp = new Processor(sensor, new Agent());
 		Pathfinder pf = new Pathfinder();
 		Waypoint dest = new Waypoint(300, 200);
 		Path thePath;
