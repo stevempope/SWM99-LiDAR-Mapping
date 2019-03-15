@@ -24,6 +24,8 @@ public class AppController {
 	private boolean pathToggle;
 	private Integer [] tempSense;
 	private boolean hasMap;
+	private double lastX;
+	private double lastY;
 
 	public AppController() {		
 		view = new App();
@@ -76,6 +78,7 @@ public class AppController {
 		System.out.printf("Canvas height: %f, Canvas width: %f\n", mapPane.getHeight(), mapPane.getWidth());
 		System.out.printf("Click! X = %f Y = %f \n",event.getX(), event.getY());
 		angle = (int)Math.toDegrees(Math.atan2(Math.abs(mapPane.getHeight()/2) - event.getY(), Math.abs((mapPane.getWidth()/2) - event.getX())));
+		angle = (angle + theAgent.getPosition().getAngle()) %360;
 		if (event.getX() < can.getWidth()/2) {
 			if (event.getY() < can.getHeight()) {
 				dest.setAngle(Math.abs(angle - 180));
@@ -93,6 +96,8 @@ public class AppController {
 		System.out.printf("%d\n", dest.getAngle());
 		dest.setDistance ((int)(Math.sqrt(Math.abs(((can.getHeight()/2) - event.getY()) * ((can.getHeight()/2) - event.getY())) + Math.abs(((can.getWidth()/2) - event.getX()) * ((can.getWidth()/2) - event.getX())))));
 		System.out.println(dest.getDistance().toString());
+		lastX = event.getX();
+		lastY = event.getY();
 		paint();
 	}
 
@@ -213,9 +218,8 @@ public class AppController {
 
 	private void drawDest() {
 		if (dest != null) {
-			CartesianPair destXY = new CartesianPair(dest);
 			can.getGraphicsContext2D().setFill(Color.CHARTREUSE);
-			can.getGraphicsContext2D().fillOval(mapPane.getWidth()/2  + destXY.getX(),mapPane.getHeight()/2 + destXY.getY(), 10, 10);
+			can.getGraphicsContext2D().fillOval(lastX,lastY, 10, 10);
 		}
 	}
 
