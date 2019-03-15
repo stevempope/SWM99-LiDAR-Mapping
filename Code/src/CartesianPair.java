@@ -12,6 +12,16 @@ public class CartesianPair {
 	public CartesianPair(Waypoint ad) {
 		x = (ad.getDistance() * (Math.cos(Math.toRadians(ad.getAngle()))));
 		y = (ad.getDistance() * (Math.sin(Math.toRadians(ad.getAngle()))));
+		if (ad.getDistance() > 270) {
+			y = -y;
+		}
+		else if (ad.getDistance() > 180) {
+			x = -x;
+			y = -y;
+		}
+		else if(ad.getDistance() > 90) {
+			x = -x;
+		} 
 	}
 
 	public double getX() {
