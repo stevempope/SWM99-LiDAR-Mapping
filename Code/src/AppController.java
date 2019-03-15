@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -17,7 +16,6 @@ public class AppController {
 	private Pathfinder pf;
 	private Waypoint dest;
 	private Path pa;
-	private int counter;
 	private int angle;
 	private Agent theAgent;
 	private boolean lidarToggle;
@@ -34,7 +32,6 @@ public class AppController {
 		pf = new Pathfinder();
 		pa = new Path();
 		dest = new Waypoint(0,0);
-		counter = 0;
 		theAgent = new Agent();
 		lidarToggle = false;
 		agentToggle = false;
@@ -68,15 +65,11 @@ public class AppController {
 	}
 
 	@FXML protected void handleSenseCall(ActionEvent event) {
-		if(counter < v.getDataSetSize()) {
-			tempSense = v.sense(counter);
+		if(pr != null) {
+			pr.updateMap(m);
+			lidarToggle = true;
 			paint();
 		}
-		else {
-			System.out.printf("Sorry, no more returns in the set...Returning to original \n");
-			counter = 0;
-		}
-		System.out.println(event.getSource());
 	}
 
 	@FXML protected void canClick(MouseEvent event) {
@@ -123,7 +116,6 @@ public class AppController {
 				if(pa.getPath().size() > 0) {
 					Waypoint next = pa.popNextWaypoint();
 					theAgent.setPosition(next);
-					m.transformMap(next);
 					paint();
 				}
 				else {
@@ -223,7 +215,7 @@ public class AppController {
 		if (dest != null) {
 			CartesianPair destXY = new CartesianPair(dest);
 			can.getGraphicsContext2D().setFill(Color.CHARTREUSE);
-			can.getGraphicsContext2D().fillOval(mapPane.getWidth()/2  + destXY.getX(),mapPane.getHeight()/2 - destXY.getY(), 10, 10);
+			can.getGraphicsContext2D().fillOval(mapPane.getWidth()/2  + destXY.getX(),mapPane.getHeight()/2 + destXY.getY(), 10, 10);
 		}
 	}
 
@@ -234,17 +226,17 @@ public class AppController {
 	}
 
 	private void drawSense() {
-		if (tempSense != null) {
 			can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
 			int arrPos = 0;
-			for(int i : tempSense) {
-				if (i > 0) {
-					can.getGraphicsContext2D().fillOval(getX(arrPos,i), getY(arrPos,i), 5, 5);
+			for(ReturnSet r : m.getBlockages()) {
+				for (LReturn l: r.getBlockages()) {
+					for(Integer i : l.getBlocks()) {
+						can.getGraphicsContext2D().fillOval(getX((arrPos + l.getStart()),i), getY((arrPos + l.getStart()),i),5,5);
+						arrPos++;
+					}
 				}
-				arrPos++;
 			}
-			counter++;
-		}
+
 	}
 
 	private void drawMap() {

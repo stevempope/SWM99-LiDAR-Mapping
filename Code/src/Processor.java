@@ -19,7 +19,6 @@ public class Processor {
 
 	private VLsensor theSensor;
 	private ReturnSet theResultSet;
-	private Integer counter;
 	private Agent theAgent;
 
 	/**
@@ -34,7 +33,6 @@ public class Processor {
 	 * @param size - The size of the pathfinding agent
 	 */
 	public Processor (VLsensor vls, Agent a) {
-		counter = 0;
 		theAgent =  a;
 		theSensor = vls;
 	}
@@ -89,30 +87,35 @@ public class Processor {
 	 * @return the ResultSet of blockages
 	 */
 	public ReturnSet scanEnvironment(ReturnSet retSet) {
-		Integer [] workingSet = theSensor.sense(counter);
+		Integer [] workingSet = theSensor.senseNext();
 		Integer prev = 0;
-		counter++;
-		Integer temp = 0;
+		Integer temp = 0; //TODO refactor for %360?
+		CartesianPair agentOffset = new CartesianPair(theAgent.getPosition());
+		Integer offSetAngle = theAgent.getPosition().getAngle();
 		LReturn blockage = new LReturn();
 		for (Integer i: workingSet) {
 			if (i > 0) {
 				if (blockage.getStart() == null) {
-					blockage.setStart(temp);
+					blockage.setStart((temp + offSetAngle)%360);
 				}
 				else if (Math.abs(i - prev) > theAgent.getSize()) {
-					blockage.setEnd(temp -1);
+					blockage.setEnd(((temp -1) + offSetAngle)%360);
 					retSet.addBlockage(blockage);
 					blockage = new LReturn();
-					blockage.setStart(temp);
-				}				
-				blockage.setDistance(i);
+					blockage.setStart((temp + offSetAngle)%360);
+				}
+				CartesianPair currDist = new CartesianPair(new Waypoint((temp + offSetAngle)%360, i));
+				currDist.setX(agentOffset.getX() + currDist.getX());
+				currDist.setY(agentOffset.getY() + currDist.getY());
+				Waypoint fin = new Waypoint(currDist);
+				blockage.setDistance(fin.getDistance());
 				if (temp == workingSet.length-1) {
-					blockage.setEnd(temp);
+					blockage.setEnd((temp + offSetAngle)%360);
 					retSet.addBlockage(blockage);
 				}
 			}
 			else if (blockage.getStart() != null) {
-				blockage.setEnd(temp - 1);
+				blockage.setEnd(((temp -1) + offSetAngle)%360);
 				retSet.addBlockage(blockage);
 				blockage = new LReturn();
 			}

@@ -124,14 +124,14 @@ public class UnitTesting {
 		VLsensor testSensor2 = new VLsensor(Orientation.clockwise);
 		
 		assertTrue(testSensor1.getOrientation() == Orientation.antiClockwise);
-		assertTrue(testSensor1.sense(0).length == 360);
-		assertTrue(testSensor1.sense(1).length == 360);
-		assertTrue(testSensor1.sense(2).length == 360);
+		assertTrue(testSensor1.senseNext().length == 360);
+		assertTrue(testSensor1.senseNext().length == 360);
+		assertTrue(testSensor1.senseNext().length == 360);
 		
 		assertTrue(testSensor2.getOrientation() == Orientation.clockwise);
-		assertTrue(testSensor2.sense(0).length == 360);
-		assertTrue(testSensor2.sense(1).length == 360);
-		assertTrue(testSensor2.sense(2).length == 360);
+		assertTrue(testSensor2.senseNext().length == 360);
+		assertTrue(testSensor2.senseNext().length == 360);
+		assertTrue(testSensor2.senseNext().length == 360);
 	}
 	
 	/*

@@ -15,7 +15,7 @@ public class CartesianPair {
 		if (ad.getDistance() > 270) {
 			y = -y;
 		}
-		else if (ad.getDistance() > 180) {
+		else if (ad.getDistance() > 180 && ad.getDistance() < 271) {
 			x = -x;
 			y = -y;
 		}
