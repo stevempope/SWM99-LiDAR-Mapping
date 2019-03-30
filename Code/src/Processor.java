@@ -54,7 +54,7 @@ public class Processor {
 		theMap.addScan(theResultSet);
 	}
 
-/*	public void fullUpdateMap(Map theMap) {
+	/*	public void fullUpdateMap(Map theMap) {
 		theResultSet = new ReturnSet(theSensor.getOrientation());
 		theResultSet = scanEnvironment(theResultSet);
 		theResultSet = blockageAmalgamation(theResultSet);
@@ -214,17 +214,38 @@ public class Processor {
 		return temp;	
 	}
 
-/*	public Map totalMerge (Map m ) {
+	/*	public Map totalMerge (Map m ) {
 		Map newMap = m;
 		for(ReturnSet r : m.getBlockages()) {
 			for(LReturn l: r.getBlockages()) {
-				
+
 			//Compare to all lreturns from other
 			//How to 
 			}
 		}
 		return newMap;
 	}*/
+
+	public void agentMoved(Map theMap) {
+		CartesianPair offset = new CartesianPair(theAgent.getPosition());
+		int count = 0;
+		for(ReturnSet r : theMap.getBlockages()) {
+			for (LReturn l : r.getBlockages()) {
+				for(Integer d : l.getBlocks()) {
+					CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d));
+					p.setX(p.getX() + offset.getX());
+					p.setY(p.getY() + offset.getY());
+					Waypoint n = new Waypoint(p);
+					if (count == 0) {
+						l.setStart(n.getAngle());
+					}
+					l.setEnd(n.getAngle());
+					d = n.getDistance();
+					count++;
+				}
+			}
+		}
+	}
 }
 
 

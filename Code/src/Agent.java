@@ -13,6 +13,7 @@ package lidarMapping;
 public class Agent {
 	private Waypoint position;
 	private Integer size;
+	private boolean visibility;
 	
 	/**
 	 * Agent Constructor. Assumes a default size and origin point.	
@@ -20,6 +21,7 @@ public class Agent {
 	public Agent() {
 		position = new Waypoint (0,0);
 		size = 10;
+		visibility = false;
 	}
 	
 	/**
@@ -52,5 +54,13 @@ public class Agent {
 	 */
 	public void setSize(Integer newSize) {
 		size = newSize;
+	}
+
+	public boolean isVisible() {
+		return visibility;
+	}
+	
+	public void setVisible(boolean state) {
+		visibility = state;
 	}
 }

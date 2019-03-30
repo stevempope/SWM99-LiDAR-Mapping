@@ -3,6 +3,7 @@ package lidarMapping;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -15,9 +16,9 @@ import javafx.stage.Stage;
  */
 
 public class App extends Application{
-	Stage ps;
-	Parent pa;
-	Scene sc;
+	private Stage ps;
+	private Parent pa;
+	private Scene sc;
 
 	public static void main (String [] args) {
 		launch(args);
