@@ -12,6 +12,7 @@ package lidarMapping;
 
 public class Agent {
 	private Waypoint position;
+	private Waypoint lastPos;
 	private Integer size;
 	private boolean visibility;
 	
@@ -20,6 +21,7 @@ public class Agent {
 	 */
 	public Agent() {
 		position = new Waypoint (0,0);
+		lastPos = position;
 		size = 10;
 		visibility = false;
 	}
@@ -29,6 +31,7 @@ public class Agent {
 	 * @param wp - the new position of the agent.
 	 */
 	public void setPosition (Waypoint wp) {
+		lastPos = position;
 		position = wp;
 	}
 	
@@ -62,5 +65,9 @@ public class Agent {
 	
 	public void setVisibility(boolean v) {
 		visibility = v;
+	}
+	
+	public Waypoint getLastPos() {
+		return lastPos;
 	}
 }

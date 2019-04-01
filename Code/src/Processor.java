@@ -228,28 +228,28 @@ public class Processor {
 	
 	public void agentMoved(Map theMap) { 
 		int angleOffset = 0;
-		CartesianPair distanceOffset = new CartesianPair(theAgent.getPosition()); 
+		CartesianPair lastPos = new CartesianPair(theAgent.getLastPos());
+		CartesianPair currPos =  new CartesianPair(theAgent.getPosition());
+		CartesianPair distanceOffset = new CartesianPair();
+		distanceOffset.setX(currPos.getX() - lastPos.getX());
+		distanceOffset.setY(currPos.getY() - lastPos.getY());
 		System.out.printf("Offset = %f, %f \n", distanceOffset.getX(), distanceOffset.getY());
 		int count = 0; 
 		for(ReturnSet r : theMap.getBlockages()) { 
 			for (LReturn l : r.getBlockages()) { 
 				for(Integer d : l.getBlocks()) { 
 					//ROTATE FIRST
-					angleOffset = Math.abs(l.getStart()-theAgent.getPosition().getAngle());
+					angleOffset = theAgent.getPosition().getAngle() - l.getStart();
 					l.setStart(l.getStart() - angleOffset % 360);
-					l.setEnd(l.getEnd() - angleOffset % 360);
+					l.setEnd(l.getEnd() - angleOffset % 360); //FIXME DOESN'T WORK FIRST TIME BUT WORKS FOR ALL OTHERS?
 					//359th element becomes 1st etc
 					//THEN XY OFFSET FOR DISTANCE
-					/*CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d)); 
-					p.setX(p.getX() + distanceOffset.getX()); 
-					p.setY(p.getY() + distanceOffset.getY()); 
-					Waypoint n = new Waypoint(p); 
-					if (count == 0) { 
-						l.setStart(n.getAngle()); 
-					} 
-					l.setEnd(n.getAngle()); 
-					l.getBlocks().set(count,n.getDistance());
-					System.out.println(d);*/
+//					CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d)); 
+//					p.setX(p.getX() - distanceOffset.getX()); 
+//					p.setY(p.getY() - distanceOffset.getY()); 
+//					Waypoint n = new Waypoint(p); 
+//					l.getBlocks().set(count,n.getDistance());
+//					System.out.println(d);
 					count++; 
 				} 
 				count = 0;

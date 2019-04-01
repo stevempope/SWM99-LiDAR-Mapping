@@ -136,7 +136,7 @@ public class AppController {
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
-		blob = blob +45;
+		blob = blob +180;
 		theAgent.setPosition(new Waypoint(blob,100));
 		pr.agentMoved(m);
 		//TODO must write ReturnSet Amalgamate
