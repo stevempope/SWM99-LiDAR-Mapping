@@ -227,22 +227,32 @@ public class Processor {
 	}*/
 	
 	public void agentMoved(Map theMap) { 
-		CartesianPair offset = new CartesianPair(theAgent.getPosition()); 
+		int angleOffset = 0;
+		CartesianPair distanceOffset = new CartesianPair(theAgent.getPosition()); 
+		System.out.printf("Offset = %f, %f \n", distanceOffset.getX(), distanceOffset.getY());
 		int count = 0; 
 		for(ReturnSet r : theMap.getBlockages()) { 
 			for (LReturn l : r.getBlockages()) { 
 				for(Integer d : l.getBlocks()) { 
-					CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d)); 
-					p.setX(p.getX() + offset.getX()); 
-					p.setY(p.getY() + offset.getY()); 
+					//ROTATE FIRST
+					angleOffset = Math.abs(l.getStart()-theAgent.getPosition().getAngle());
+					l.setStart(l.getStart() - angleOffset % 360);
+					l.setEnd(l.getEnd() - angleOffset % 360);
+					//359th element becomes 1st etc
+					//THEN XY OFFSET FOR DISTANCE
+					/*CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d)); 
+					p.setX(p.getX() + distanceOffset.getX()); 
+					p.setY(p.getY() + distanceOffset.getY()); 
 					Waypoint n = new Waypoint(p); 
 					if (count == 0) { 
 						l.setStart(n.getAngle()); 
 					} 
 					l.setEnd(n.getAngle()); 
-					d = n.getDistance(); 
+					l.getBlocks().set(count,n.getDistance());
+					System.out.println(d);*/
 					count++; 
 				} 
+				count = 0;
 			} 
 		} 
 	}

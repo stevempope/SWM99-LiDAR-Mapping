@@ -137,7 +137,8 @@ public class AppController {
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
 		blob = blob +45;
-		theAgent.setPosition(new Waypoint(blob,0));
+		theAgent.setPosition(new Waypoint(blob,100));
+		pr.agentMoved(m);
 		//TODO must write ReturnSet Amalgamate
 		paint();
 		System.out.print(event.getSource());
@@ -204,22 +205,24 @@ public class AppController {
 		if (lidarToggle) {
 			drawSense();
 		}
-		if(hasMap) {
+		
 			drawMap();
 			//Must add a toggle for this layer!
-		}
 		//Paint depending on the values
 	}
 
 	private void drawAgent() {
-		CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
-		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
+		//FIXME Remove proof of concept for Canvas manipulation
+	/*	CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
+		
 		can.getGraphicsContext2D().save();
 		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
 		can.getGraphicsContext2D().rotate(theAgent.getPosition().getAngle());
 		can.getGraphicsContext2D().fillRect(agentPos.getX()-(theAgent.getSize()/2), agentPos.getY()-(theAgent.getSize()/2), theAgent.getSize(), theAgent.getSize());
 		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
-		can.getGraphicsContext2D().restore();
+		can.getGraphicsContext2D().restore();*/
+		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
+		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2, mapPane.getHeight()/2, theAgent.getSize(), theAgent.getSize());
 	}
 
 	private void drawDest() {
