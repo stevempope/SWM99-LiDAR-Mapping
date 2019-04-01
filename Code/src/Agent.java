@@ -55,12 +55,12 @@ public class Agent {
 	public void setSize(Integer newSize) {
 		size = newSize;
 	}
-
+	
 	public boolean isVisible() {
 		return visibility;
 	}
 	
-	public void setVisible(boolean state) {
-		visibility = state;
+	public void setVisibility(boolean v) {
+		visibility = v;
 	}
 }
