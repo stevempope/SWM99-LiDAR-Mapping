@@ -25,6 +25,7 @@ public class AppController {
 	private boolean hasMap;
 	private double lastX;
 	private double lastY;
+	private int blob;
 
 	public AppController() {		
 		view = new App();
@@ -38,6 +39,7 @@ public class AppController {
 		lidarToggle = false;
 		destinationToggle = false;
 		hasMap = false;
+		blob = 0; 
 	}
 
 	/*
@@ -134,7 +136,8 @@ public class AppController {
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
-		theAgent.setPosition(new Waypoint(45,0));
+		blob = blob +45;
+		theAgent.setPosition(new Waypoint(blob,0));
 		//TODO must write ReturnSet Amalgamate
 		paint();
 		System.out.print(event.getSource());
@@ -214,8 +217,8 @@ public class AppController {
 		can.getGraphicsContext2D().save();
 		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
 		can.getGraphicsContext2D().rotate(theAgent.getPosition().getAngle());
-		can.getGraphicsContext2D().fillRect(agentPos.getX(), agentPos.getY(), theAgent.getSize(), theAgent.getSize());
-		can.getGraphicsContext2D().translate(-mapPane.getWidth()/2, -mapPane.getHeight()/2);
+		can.getGraphicsContext2D().fillRect(agentPos.getX()-(theAgent.getSize()/2), agentPos.getY()-(theAgent.getSize()/2), theAgent.getSize(), theAgent.getSize());
+		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
 		can.getGraphicsContext2D().restore();
 	}
 
