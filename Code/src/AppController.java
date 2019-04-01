@@ -19,7 +19,6 @@ public class AppController {
 	private int angle;
 	private Agent theAgent;
 	private boolean lidarToggle;
-	private boolean agentToggle;
 	private boolean destinationToggle;
 	private boolean pathToggle;
 	private Integer [] tempSense;
@@ -37,7 +36,6 @@ public class AppController {
 		dest = new Waypoint(0,0);
 		theAgent = new Agent();
 		lidarToggle = false;
-		agentToggle = false;
 		destinationToggle = false;
 		hasMap = false;
 	}
@@ -136,6 +134,7 @@ public class AppController {
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
+		theAgent.setPosition(new Waypoint(45,0));
 		//TODO must write ReturnSet Amalgamate
 		paint();
 		System.out.print(event.getSource());
@@ -212,7 +211,12 @@ public class AppController {
 	private void drawAgent() {
 		CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
 		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
-		can.getGraphicsContext2D().fillRect(agentPos.getX() + (mapPane.getWidth()/2), agentPos.getY() + (mapPane.getHeight()/2), theAgent.getSize(), theAgent.getSize());
+		can.getGraphicsContext2D().save();
+		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
+		can.getGraphicsContext2D().rotate(theAgent.getPosition().getAngle());
+		can.getGraphicsContext2D().fillRect(agentPos.getX(), agentPos.getY(), theAgent.getSize(), theAgent.getSize());
+		can.getGraphicsContext2D().translate(-mapPane.getWidth()/2, -mapPane.getHeight()/2);
+		can.getGraphicsContext2D().restore();
 	}
 
 	private void drawDest() {
