@@ -238,9 +238,11 @@ public class Processor {
 		for(ReturnSet r : theMap.getBlockages()) { 
 			for (LReturn l : r.getBlockages()) {
 				angleOffset = theAgent.getPosition().getAngle() - theAgent.getLastPos().getAngle();
-				l.setStart(l.getStart() - angleOffset % 360);
-				l.setEnd(l.getEnd() - angleOffset % 360);
-				for(Integer d : l.getBlocks()) { 
+				l.setStart(l.getStart() + angleOffset % 360);
+				l.setEnd(l.getEnd() + angleOffset % 360);
+				for(Integer d : l.getBlocks()) {
+					CartesianPair block = new CartesianPair(new Waypoint((l.getStart() + count) % 360, d));
+					System.out.printf("Angle = %d Distance = %d X: %f Y: %f \n",(l.getStart() + count)%360, d,  block.getX(), block.getY());
 					//ROTATE FIRST
 					
 					//System.out.print(angleOffset);
