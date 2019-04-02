@@ -21,7 +21,7 @@ public class AppController {
 	private boolean lidarToggle;
 	private boolean destinationToggle;
 	private boolean pathToggle;
-	private Integer [] tempSense;
+	private double [] tempSense;
 	private boolean hasMap;
 	private double lastX;
 	private double lastY;
@@ -55,7 +55,7 @@ public class AppController {
 	 * FXML Event Handlers for Button and click events
 	 */
 	@FXML protected void handleSetAgentSize(ActionEvent event) {
-		Integer size = Integer.parseInt(agentSize.getText());
+		double size = Integer.parseInt(agentSize.getText());
 		if (size > 0) {
 			theAgent.setSize(size);
 			agentSize.setText("Agent Size set to: " + theAgent.getSize().toString());
@@ -93,7 +93,7 @@ public class AppController {
 		dest.setAngle((angle + theAgent.getPosition().getAngle()) % 360);
 		System.out.printf("%d\n", dest.getAngle());
 		dest.setDistance ((int)(Math.sqrt(Math.abs(((can.getHeight()/2) - event.getY()) * ((can.getHeight()/2) - event.getY())) + Math.abs(((can.getWidth()/2) - event.getX()) * ((can.getWidth()/2) - event.getX())))));
-		System.out.println(dest.getDistance().toString());
+		//System.out.println(dest.getDistance().toString());
 		lastX = event.getX();
 		lastY = event.getY();
 		paint();
@@ -136,17 +136,39 @@ public class AppController {
 	}
 
 	@FXML protected void handleCompleteRun(ActionEvent event) {
-		blob = blob +90;
-		theAgent.setPosition(new Waypoint(blob,0));
+		blob = blob +10;
+		theAgent.setPosition(new Waypoint(blob,blob));
 		pr.agentMoved(m);
-		//TODO must write ReturnSet Amalgamate
 		paint();
 		System.out.print(event.getSource());
 	}
 
 	@FXML protected void handleAlgorithmChange(ActionEvent event) {
-		//TODO Need to write more than 1 or deprecate
-		paint();
+		blob = (blob +90)%360;
+		theAgent.setPosition(new Waypoint(blob,10));
+		can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
+		int arrPos = 0;
+		for (ReturnSet r : m.getBlockages()) {
+			can.getGraphicsContext2D().save();
+			can.getGraphicsContext2D().translate(-mapPane.getWidth()/2, -mapPane.getHeight()/2);
+			can.getGraphicsContext2D().rotate(r.getOffset().getAngle());
+			for(LReturn l: r.getBlockages()) {
+				for(double i : l.getBlocks()) {
+					CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
+					if (v.getOrientation() == Orientation.antiClockwise) {
+						range.setY(-range.getY());
+					}
+					can.getGraphicsContext2D().fillOval(range.getX(), range.getY(),5,5);
+					arrPos++;
+				}
+				arrPos = 0;
+			}
+		}
+		//can.getGraphicsContext2D().fillRect(agentPos.getX()-(theAgent.getSize()/2), agentPos.getY()-(theAgent.getSize()/2), theAgent.getSize(), theAgent.getSize());
+
+		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
+		can.getGraphicsContext2D().restore();
+	//	paint();
 		System.out.print(event.getSource());
 	}
 
@@ -205,22 +227,17 @@ public class AppController {
 		if (lidarToggle) {
 			drawSense();
 		}
-		
-			drawMap();
-			//Must add a toggle for this layer!
+
+		drawMap();
+		//Must add a toggle for this layer!
 		//Paint depending on the values
 	}
 
 	private void drawAgent() {
 		//FIXME Remove proof of concept for Canvas manipulation
-	/*	CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
-		
-		can.getGraphicsContext2D().save();
-		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
-		can.getGraphicsContext2D().rotate(theAgent.getPosition().getAngle());
-		can.getGraphicsContext2D().fillRect(agentPos.getX()-(theAgent.getSize()/2), agentPos.getY()-(theAgent.getSize()/2), theAgent.getSize(), theAgent.getSize());
-		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
-		can.getGraphicsContext2D().restore();*/
+		/*	CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
+
+		 */
 		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
 		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2, mapPane.getHeight()/2, theAgent.getSize(), theAgent.getSize());
 	}
@@ -240,45 +257,44 @@ public class AppController {
 	}
 
 	private void drawSense() {
-			can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
-			int arrPos = 0;
-			for(ReturnSet r : m.getBlockages()) {
-				for (LReturn l: r.getBlockages()) {
-					for(Integer i : l.getBlocks()) {
-						CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
-						if (v.getOrientation() == Orientation.antiClockwise) {
-							range.setY(-range.getY());
-						}
-						can.getGraphicsContext2D().fillOval(range.getX() + (mapPane.getWidth()/2), range.getY() + (mapPane.getHeight()/2),5,5);
-						arrPos++;
+		can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
+		int arrPos = 0;
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
+				for(double i : l.getBlocks()) {
+					CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
+					if (v.getOrientation() == Orientation.antiClockwise) {
+						range.setY(-range.getY());
 					}
-					arrPos = 0;
+					can.getGraphicsContext2D().fillOval(range.getX() + (mapPane.getWidth()/2), range.getY() + (mapPane.getHeight()/2),5,5);
+					arrPos++;
 				}
+				arrPos = 0;
 			}
+		}
 	}
 
 	private void drawMap() {
 		int arrPos = 0;
 		for(ReturnSet r : m.getBlockages()) {
 			for (LReturn l: r.getBlockages()) {
-				System.out.println(l.getBlocks());
-				
+
 				can.getGraphicsContext2D().setFill(Color.CRIMSON);
 				CartesianPair start = new CartesianPair(new Waypoint(l.getStart(), l.getStartDist()));
 				if (v.getOrientation() == Orientation.antiClockwise) {
 					start.setY(-start.getY());
 				}
 				can.getGraphicsContext2D().fillOval(start.getX() + (mapPane.getWidth()/2), start.getY() + (mapPane.getHeight()/2), 10 , 10);
-				
+
 				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
 				CartesianPair end = new CartesianPair(new Waypoint(l.getEnd(), l.getEndDist())); 
 				if(v.getOrientation() == Orientation.antiClockwise) {
 					end.setY(-end.getY());
 				}
 				can.getGraphicsContext2D().fillOval(can.getWidth()/2 + end.getX(), can.getHeight()/2 + end.getY(),10 , 10);
-				
+
 				can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
-				for(Integer i : l.getBlocks()) {
+				for(double i : l.getBlocks()) {
 					CartesianPair block = new CartesianPair(new Waypoint(l.getStart() + arrPos, i));
 					if (v.getOrientation() == Orientation.antiClockwise) {
 						block.setY(-block.getY());

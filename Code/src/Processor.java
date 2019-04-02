@@ -44,13 +44,16 @@ public class Processor {
 	 */
 	public void updateMap(Map theMap) {
 		theResultSet = new ReturnSet(theSensor.getOrientation());
-		theMap.addScan(scanEnvironment(theResultSet));
+		theResultSet = scanEnvironment(theResultSet);
+		theResultSet.setOffset(theAgent.getPosition());
+		theMap.addScan(theResultSet);
 	}
 
 	public void smarterUpdateMap(Map theMap) {
 		theResultSet = new ReturnSet(theSensor.getOrientation());
 		theResultSet = scanEnvironment(theResultSet);
 		theResultSet = blockageAmalgamation(theResultSet);
+		theResultSet.setOffset(theAgent.getPosition());
 		theMap.addScan(theResultSet);
 	}
 
@@ -87,13 +90,13 @@ public class Processor {
 	 * @return the ResultSet of blockages
 	 */
 	public ReturnSet scanEnvironment(ReturnSet retSet) {
-		Integer [] workingSet = theSensor.senseNext();
-		Integer prev = 0;
-		Integer temp = 0; //TODO refactor for %360?
+		double [] workingSet = theSensor.senseNext();
+		double prev = 0;
+		double temp = 0; //TODO refactor for %360?
 		CartesianPair agentOffset = new CartesianPair(theAgent.getPosition());
-		Integer offSetAngle = theAgent.getPosition().getAngle();
+		double offSetAngle = theAgent.getPosition().getAngle();
 		LReturn blockage = new LReturn();
-		for (Integer i: workingSet) {
+		for (double i: workingSet) {
 			if (i > 0) {
 				if (blockage.getStart() == null) {
 					blockage.setStart((temp + offSetAngle)%360);
@@ -175,7 +178,7 @@ public class Processor {
 		ReturnSet temp = new ReturnSet();
 		ReturnSet scratch = new ReturnSet();
 		double cosRule;
-		int zeros = 0;
+		double zeros = 0;
 		int pos;
 		LReturn prev = new LReturn();
 		prev = orig.getBlockages().get(counter);
@@ -227,43 +230,40 @@ public class Processor {
 	}*/
 
 	public void agentMoved(Map theMap) { 
-		int angleOffset = 0;
-		CartesianPair lastPos = new CartesianPair(theAgent.getLastPos());
-		CartesianPair currPos =  new CartesianPair(theAgent.getPosition());
-		CartesianPair distanceOffset = new CartesianPair();
-		distanceOffset.setX(currPos.getX() - lastPos.getX());
-		distanceOffset.setY(currPos.getY() - lastPos.getY());
-		System.out.printf("Offset = %f, %f \n", distanceOffset.getX(), distanceOffset.getY());
-		int count = 0; 
+		double angleOffset = 0;
+//		CartesianPair lastPos = new CartesianPair(theAgent.getLastPos());
+//		CartesianPair currPos =  new CartesianPair(theAgent.getPosition());
+//		CartesianPair distanceOffset = new CartesianPair();
+//		distanceOffset.setX(currPos.getX() - lastPos.getX());
+//		distanceOffset.setY(currPos.getY() - lastPos.getY());
+//		System.out.printf("Offset = %f, %f \n", distanceOffset.getX(), distanceOffset.getY());
 		for(ReturnSet r : theMap.getBlockages()) { 
 			for (LReturn l : r.getBlockages()) {
-				angleOffset = theAgent.getPosition().getAngle() - theAgent.getLastPos().getAngle();
+				angleOffset = (theAgent.getPosition().getAngle() - theAgent.getLastPos().getAngle())%360;
 				if (theSensor.getOrientation() == Orientation.antiClockwise) {
-					l.setStart(l.getStart() + angleOffset % 360);
-					l.setEnd(l.getEnd() + angleOffset % 360);
+					l.setStart(l.getStart() + angleOffset);
+					l.setEnd(l.getEnd() + angleOffset);
 				}
 				else {
-					l.setStart(l.getStart() - angleOffset % 360);
-					l.setEnd(l.getEnd() - angleOffset % 360);
+					l.setStart(l.getStart() - angleOffset);
+					l.setEnd(l.getEnd() - angleOffset);
 				}
-				for(Integer d : l.getBlocks()) {
-					CartesianPair block = new CartesianPair(new Waypoint((l.getStart() + count) % 360, d));
-					System.out.printf("Angle = %d Distance = %d X: %f Y: %f \n",(l.getStart() + count)%360, d,  block.getX(), block.getY());
-					//ROTATE FIRST
-
-					//System.out.print(angleOffset);
-
-					//359th element becomes 1st etc
-					//THEN XY OFFSET FOR DISTANCE
-					//					CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d)); 
-					//					p.setX(p.getX() - distanceOffset.getX()); 
-					//					p.setY(p.getY() - distanceOffset.getY()); 
-					//					Waypoint n = new Waypoint(p); 
-					//					l.getBlocks().set(count,n.getDistance());
-					//					System.out.println(d);
-					count++; 
-				} 
-				count = 0;
+//				for(double d : l.getBlocks()) {
+//					CartesianPair block = new CartesianPair(new Waypoint((l.getStart() + count), d));
+//					System.out.printf("Angle = %f Distance = %f X: %f Y: %f \n",(l.getStart() + count), d,  block.getX(), block.getY());
+//					block.setX(block.getX() + distanceOffset.getX()); 
+//					block.setY(block.getY() + distanceOffset.getY());
+//					
+//					Waypoint n = new Waypoint(block);
+//					//System.out.printf("Angle N = %f Distance N = %f \n", n.getAngle(), n.getDistance());
+//					l.getBlocks().set(count, (n.getDistance()));
+//
+//					//359th element becomes 1st etc
+//					//THEN XY OFFSET FOR DISTANCE
+//
+//					//					System.out.println(d);
+//					count++; 
+//				} 
 			} 
 		} 
 	}

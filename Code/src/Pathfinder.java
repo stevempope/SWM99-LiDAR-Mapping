@@ -83,9 +83,9 @@ public class Pathfinder {
 		return false;
 	}
 	
-	private double cosRule(Integer start, Integer startDist, Waypoint destination) {
-		Integer a = startDist;
-		Integer c = destination.getDistance();
+	private double cosRule(double start, double startDist, Waypoint destination) {
+		double a = startDist;
+		double c = destination.getDistance();
 		double b = Math.toRadians(Math.abs(start - destination.getAngle()));
 		return Math.sqrt((a*a + c*c) - 2*a*c*(Math.cos(b)));
 	}

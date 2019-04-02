@@ -13,7 +13,7 @@ package lidarMapping;
 public class Agent {
 	private Waypoint position;
 	private Waypoint lastPos;
-	private Integer size;
+	private double size;
 	private boolean visibility;
 	
 	/**
@@ -47,7 +47,7 @@ public class Agent {
 	 * Returns the size of the agent in MM.
 	 * @return agent size.
 	 */
-	public Integer getSize() {
+	public Double getSize() {
 		return size;
 	}
 	
@@ -55,8 +55,8 @@ public class Agent {
 	 * Changes the size of the agent to a new value in MM. This is important for classification of objects in our environment.
 	 * @param the new size in Millimetres.
 	 */
-	public void setSize(Integer newSize) {
-		size = newSize;
+	public void setSize(double size2) {
+		size = size2;
 	}
 	
 	public boolean isVisible() {

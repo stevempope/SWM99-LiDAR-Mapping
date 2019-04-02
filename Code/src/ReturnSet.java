@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class ReturnSet {
 	private Orientation theOrientation;
 	private ArrayList<LReturn> blockageList;
+	private Waypoint location;
 
 	/**
 	 * The base constructor for a ReturnSet. This assumes an anti-clockwise rotation.
@@ -27,6 +28,7 @@ public class ReturnSet {
 	public ReturnSet() {
 		theOrientation = Orientation.antiClockwise;
 		blockageList = new ArrayList<LReturn>();
+		location = new Waypoint (0,0);
 	}
 	
 	/**
@@ -65,5 +67,13 @@ public class ReturnSet {
 	
 	public void removeAll() {
 		blockageList.clear();
+	}
+	
+	public Waypoint getOffset() {
+		return location;
+	}
+	
+	public void setOffset(Waypoint loc) {
+		location = loc;
 	}
 }

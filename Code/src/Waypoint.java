@@ -10,8 +10,8 @@ package lidarMapping;
  *
  */
 public class Waypoint {
-	private Integer theAngle;
-	private Integer theDistance;
+	private double theAngle;
+	private double theDistance;
 	
 	public Waypoint() {
 	}
@@ -21,21 +21,21 @@ public class Waypoint {
 	 * @param a the angle from the point of origin
 	 * @param d the distance from the point of origin
 	 */
-	public Waypoint(Integer a, Integer d) {
+	public Waypoint(double a, double d) {
 		theAngle = a;
 		theDistance = d;
 	}
 	
 	public Waypoint (CartesianPair p) {
-		theAngle = (int) Math.toDegrees(Math.atan2(p.getY(), p.getX()));
-		theDistance = (int)(Math.sqrt((p.getY() * p.getY()) + (p.getX() * p.getX())));
+		theAngle = Math.toDegrees(Math.atan2(p.getY(), p.getX()));
+		theDistance = Math.sqrt((p.getY() * p.getY()) + (p.getX() * p.getX()));
 	}
 	
 	/**
 	 * Gets the angle of the Waypoint
-	 * @return The integer angle
+	 * @return The double angle
 	 */
-	public Integer getAngle() {
+	public double getAngle() {
 		return theAngle;
 	}
 	
@@ -43,15 +43,15 @@ public class Waypoint {
      * Gets the distance of the Waypoint from the origin
      * @return The distance in Millimetres (mm)
      */
-	public Integer getDistance() {
+	public double getDistance() {
 		return theDistance;
 	}
 	
-	public void setAngle(Integer a) {
+	public void setAngle(double a) {
 		theAngle = a;
 	}
 	
-	public void setDistance(Integer d) {
+	public void setDistance(double d) {
 		theDistance = d;
 	}
 }
