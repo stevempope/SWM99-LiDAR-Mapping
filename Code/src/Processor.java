@@ -236,12 +236,15 @@ public class Processor {
 		System.out.printf("Offset = %f, %f \n", distanceOffset.getX(), distanceOffset.getY());
 		int count = 0; 
 		for(ReturnSet r : theMap.getBlockages()) { 
-			for (LReturn l : r.getBlockages()) { 
+			for (LReturn l : r.getBlockages()) {
+				angleOffset = theAgent.getPosition().getAngle() - theAgent.getLastPos().getAngle();
+				l.setStart(l.getStart() - angleOffset % 360);
+				l.setEnd(l.getEnd() - angleOffset % 360);
 				for(Integer d : l.getBlocks()) { 
 					//ROTATE FIRST
-					angleOffset = theAgent.getPosition().getAngle() - l.getStart();
-					l.setStart(l.getStart() - angleOffset % 360);
-					l.setEnd(l.getEnd() - angleOffset % 360); //FIXME DOESN'T WORK FIRST TIME BUT WORKS FOR ALL OTHERS?
+					
+					//System.out.print(angleOffset);
+					
 					//359th element becomes 1st etc
 					//THEN XY OFFSET FOR DISTANCE
 //					CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d)); 
