@@ -173,7 +173,7 @@ public class AppController {
 
 	private void drawAgent() {
 		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
-		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2, mapPane.getHeight()/2, theAgent.getSize(), theAgent.getSize());
+		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2 - theAgent.getSize()/2, mapPane.getHeight()/2 - theAgent.getSize()/2, theAgent.getSize(), theAgent.getSize());
 	}
 
 	private void drawDest() {
@@ -186,7 +186,7 @@ public class AppController {
 	private void drawPath() {
 		CartesianPair pathXY = new CartesianPair(pa.getPath().get(0));
 		can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
-		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2, mapPane.getHeight()/2, pathXY.getX(), pathXY.getY());
+		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2, mapPane.getHeight()/2, pathXY.getX() + mapPane.getWidth()/2, pathXY.getY() + mapPane.getHeight()/2);
 	}
 
 	private void drawSense() {
@@ -240,11 +240,4 @@ public class AppController {
 			}
 		}
 	}
-
-	/*
-	 * To be deprecated if possible
-	 */
-
-
-
 }

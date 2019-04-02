@@ -21,11 +21,6 @@ public class Processor {
 	private ReturnSet theResultSet;
 	private Agent theAgent;
 
-	/**
-	 * Deprecated?
-	 */
-	public Processor() {
-	}
 
 	/**
 	 * The constructor for a Processor
@@ -53,16 +48,6 @@ public class Processor {
 		theResultSet = blockageAmalgamation(theResultSet);
 		theMap.addScan(theResultSet);
 	}
-
-	/*	public void fullUpdateMap(Map theMap) {
-		theResultSet = new ReturnSet(theSensor.getOrientation());
-		theResultSet = scanEnvironment(theResultSet);
-		theResultSet = blockageAmalgamation(theResultSet);
-		theMap.addScan(theResultSet);
-		theMap = totalMerge(theMap);
-
-	}*/
-
 	/**
 	 * The core logic of a processor.
 	 * There are some major conditions we consider when looking at the environment:
@@ -212,60 +197,6 @@ public class Processor {
 			temp.addBlockage(n);
 		}
 		return temp;	
-	}
-
-	/*	public Map totalMerge (Map m ) {
-		Map newMap = m;
-		for(ReturnSet r : m.getBlockages()) {
-			for(LReturn l: r.getBlockages()) {
-
-			//Compare to all lreturns from other
-			//How to 
-			}
-		}
-		return newMap;
-	}*/
-
-	public void agentMoved(Map theMap) { 
-		int angleOffset = 0;
-		CartesianPair lastPos = new CartesianPair(theAgent.getLastPos());
-		CartesianPair currPos =  new CartesianPair(theAgent.getPosition());
-		CartesianPair distanceOffset = new CartesianPair();
-		distanceOffset.setX(currPos.getX() - lastPos.getX());
-		distanceOffset.setY(currPos.getY() - lastPos.getY());
-		System.out.printf("Offset = %f, %f \n", distanceOffset.getX(), distanceOffset.getY());
-		int count = 0; 
-		for(ReturnSet r : theMap.getBlockages()) { 
-			for (LReturn l : r.getBlockages()) {
-				angleOffset = theAgent.getPosition().getAngle() - theAgent.getLastPos().getAngle();
-				if (theSensor.getOrientation() == Orientation.antiClockwise) {
-					l.setStart(l.getStart() + angleOffset % 360);
-					l.setEnd(l.getEnd() + angleOffset % 360);
-				}
-				else {
-					l.setStart(l.getStart() - angleOffset % 360);
-					l.setEnd(l.getEnd() - angleOffset % 360);
-				}
-				for(Integer d : l.getBlocks()) {
-					CartesianPair block = new CartesianPair(new Waypoint((l.getStart() + count) % 360, d));
-					System.out.printf("Angle = %d Distance = %d X: %f Y: %f \n",(l.getStart() + count)%360, d,  block.getX(), block.getY());
-					//ROTATE FIRST
-
-					//System.out.print(angleOffset);
-
-					//359th element becomes 1st etc
-					//THEN XY OFFSET FOR DISTANCE
-					//					CartesianPair p = new CartesianPair(new Waypoint(l.getStart() + count, d)); 
-					//					p.setX(p.getX() - distanceOffset.getX()); 
-					//					p.setY(p.getY() - distanceOffset.getY()); 
-					//					Waypoint n = new Waypoint(p); 
-					//					l.getBlocks().set(count,n.getDistance());
-					//					System.out.println(d);
-					count++; 
-				} 
-				count = 0;
-			} 
-		} 
 	}
 }
 
