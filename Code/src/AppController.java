@@ -9,7 +9,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 public class AppController {
 
-	private App view;
 	private VLsensor v;
 	private Map m;
 	private Processor pr;
@@ -21,16 +20,11 @@ public class AppController {
 	private boolean lidarToggle;
 	private boolean destinationToggle;
 	private boolean pathToggle;
-	private Integer [] tempSense;
-	private boolean hasMap;
 	private double lastX;
 	private double lastY;
-	private int blob;
 	private boolean mapToggle;
 
 	public AppController() {		
-		view = new App();
-		//v = new VLsensor(Orientation.antiClockwise);
 		v = new VLsensor();
 		m = new Map();
 		pf = new Pathfinder();
@@ -39,8 +33,6 @@ public class AppController {
 		theAgent = new Agent();
 		lidarToggle = false;
 		destinationToggle = false;
-		hasMap = false;
-		blob = 0; 
 	}
 
 	/*
@@ -104,7 +96,6 @@ public class AppController {
 		if(dest != null && m.getBlockages().size() > 0) {
 			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
 			pa = pf.pathfind(m, dest);
-			hasMap = true;
 			paint();
 		}
 		else {
@@ -178,20 +169,9 @@ public class AppController {
 		if (mapToggle) {
 			drawMap();
 		}
-			//Must add a toggle for this layer!
-		//Paint depending on the values
 	}
 
 	private void drawAgent() {
-		//FIXME Remove proof of concept for Canvas manipulation
-	/*	CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
-		
-		can.getGraphicsContext2D().save();
-		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
-		can.getGraphicsContext2D().rotate(theAgent.getPosition().getAngle());
-		can.getGraphicsContext2D().fillRect(agentPos.getX()-(theAgent.getSize()/2), agentPos.getY()-(theAgent.getSize()/2), theAgent.getSize(), theAgent.getSize());
-		can.getGraphicsContext2D().translate(mapPane.getWidth()/2, mapPane.getHeight()/2);
-		can.getGraphicsContext2D().restore();*/
 		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
 		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2, mapPane.getHeight()/2, theAgent.getSize(), theAgent.getSize());
 	}
@@ -207,7 +187,6 @@ public class AppController {
 		CartesianPair pathXY = new CartesianPair(pa.getPath().get(0));
 		can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
 		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2, mapPane.getHeight()/2, pathXY.getX(), pathXY.getY());
-		//TODO refactor to agent position and for multiple waypoints in a path
 	}
 
 	private void drawSense() {
