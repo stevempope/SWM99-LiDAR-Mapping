@@ -26,6 +26,7 @@ public class AppController {
 	private double lastX;
 	private double lastY;
 	private int blob;
+	private boolean mapToggle;
 
 	public AppController() {		
 		view = new App();
@@ -113,42 +114,6 @@ public class AppController {
 
 	}
 
-	@FXML public void handleDrive(ActionEvent event) {
-		if (dest.getAngle() != 0 && dest.getDistance() != 0) {
-			if (tempSense !=  null) {
-				if(pa.getPath().size() > 0) {
-					Waypoint next = pa.popNextWaypoint();
-					theAgent.setPosition(new Waypoint (0,100));
-					pr.agentMoved(m);
-					paint();
-				}
-				else {
-					System.out.printf("Please use pathfind to generate a Path! \n");
-				}
-			}
-			else {
-				System.out.printf("Please call for a read from the LiDAR sensor \n");
-			}
-		}
-		else {
-			System.out.printf("Please select a Destination! \n");
-		}
-	}
-
-	@FXML protected void handleCompleteRun(ActionEvent event) {
-		blob = blob +90;
-		theAgent.setPosition(new Waypoint(blob,0));
-		pr.agentMoved(m);
-		//TODO must write ReturnSet Amalgamate
-		paint();
-		System.out.print(event.getSource());
-	}
-
-	@FXML protected void handleAlgorithmChange(ActionEvent event) {
-		//TODO Need to write more than 1 or deprecate
-		paint();
-		System.out.print(event.getSource());
-	}
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
 		pr.updateMap(m);
@@ -187,6 +152,11 @@ public class AppController {
 		pathToggle = !pathToggle;
 		paint();
 	}
+	
+	@FXML private void handleObjectToggle() {
+		mapToggle = !mapToggle;
+		paint();
+	}
 
 	/*
 	 * Draw methods
@@ -205,8 +175,9 @@ public class AppController {
 		if (lidarToggle) {
 			drawSense();
 		}
-		
+		if (mapToggle) {
 			drawMap();
+		}
 			//Must add a toggle for this layer!
 		//Paint depending on the values
 	}

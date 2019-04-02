@@ -17,17 +17,15 @@
             <Button layoutX="50.0" layoutY="100.0" minWidth="175" mnemonicParsing="false" onAction="#handleSetAgentSize" text="Set Agent Size" />
 			<TextField fx:id="agentSize" layoutX="50.0" layoutY="150.0" prefHeight="31.0" prefWidth="175.0" promptText="Agent Size in mm" />
             <Button layoutX="50.0" layoutY="200.0" minWidth="175" mnemonicParsing="false" onAction="#handleSenseCall" text="Scan Environment..." />
-            <Button layoutX="50.0" layoutY="250.0" minWidth="175" mnemonicParsing="false" onAction="#handlePathfind" text="Pathfind" />
-            <Button layoutX="50.0" layoutY="300.0" minWidth="175" mnemonicParsing="false" onAction="#handleCompleteRun" text="Complete Run" />
-			<Button layoutX="50.0" layoutY="350.0" minWidth="175" mnemonicParsing="false" onAction="#handleAlgorithmChange" text="Change Algorithm" />
-            <Button layoutX="50.0" layoutY="400.0" minWidth="175" mnemonicParsing="false" onAction="#handleBasicSense" text="Object Sense" />
-            <Button layoutX="50.0" layoutY="450.0" minWidth="175" mnemonicParsing="false" onAction="#handleMediumSense" text="Amalgamate Sense" />
-            <Button layoutX="50.0" layoutY="500.0" minWidth="175" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
-            <ToggleButton layoutX="50.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleLiDARToggle" text="LiDAR" />
-            <ToggleButton layoutX="123.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleAgentToggle" text="Agent" />
-            <ToggleButton layoutX="50.0" layoutY="596.0" mnemonicParsing="false" onAction="#handleDestinationToggle" text="Destination" />
-            <ToggleButton layoutX="153.0" layoutY="596.0" mnemonicParsing="false" onAction="#handlePathToggle" text="Path" />
-            <Button layoutX="50.0" layoutY="651.0" mnemonicParsing="false" text="Drive" onAction = "#handleDrive" />
+            <Button layoutX="50.0" layoutY="293.0" minWidth="175" mnemonicParsing="false" onAction="#handlePathfind" text="Pathfind" />
+            <Button layoutX="50.0" layoutY="231.0" minWidth="175" mnemonicParsing="false" onAction="#handleBasicSense" text="Object Sense" />
+            <Button layoutX="50.0" layoutY="262.0" minWidth="175" mnemonicParsing="false" onAction="#handleMediumSense" text="Amalgamate Sense" />
+            <Button layoutX="50.0" layoutY="507.0" minWidth="175" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+            <ToggleButton layoutX="50.0" layoutY="340.0" mnemonicParsing="false" onAction="#handleLiDARToggle" text="LiDAR" />
+            <ToggleButton layoutX="50.0" layoutY="371.0" mnemonicParsing="false" onAction="#handleAgentToggle" text="Agent" />
+            <ToggleButton layoutX="50.0" layoutY="402.0" mnemonicParsing="false" onAction="#handleDestinationToggle" text="Destination" />
+            <ToggleButton layoutX="50.0" layoutY="433.0" mnemonicParsing="false" onAction="#handlePathToggle" text="Path" />
+            <ToggleButton layoutX="50.0" layoutY="464.0" mnemonicParsing="false" onAction="#handleObjectToggle" text="Objects" />
          </children>
 	</AnchorPane>
   </items>
