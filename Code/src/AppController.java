@@ -108,6 +108,7 @@ public class AppController {
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
 		pr.updateMap(m);
+		System.out.println(m.getBlockages().get(0).getBlockages().size());
 		paint();
 		System.out.print(event.getSource());
 	}
@@ -115,6 +116,7 @@ public class AppController {
 
 	@FXML protected void handleMediumSense(ActionEvent event) {
 		pr.smarterUpdateMap(m);
+		System.out.println(m.getBlockages().get(0).getBlockages().size());
 		paint();
 		System.out.print(event.getSource());
 	}
@@ -143,7 +145,7 @@ public class AppController {
 		pathToggle = !pathToggle;
 		paint();
 	}
-	
+
 	@FXML private void handleObjectToggle() {
 		mapToggle = !mapToggle;
 		paint();
@@ -190,53 +192,60 @@ public class AppController {
 	}
 
 	private void drawSense() {
-			can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
-			int arrPos = 0;
-			for(ReturnSet r : m.getBlockages()) {
-				for (LReturn l: r.getBlockages()) {
-					for(Integer i : l.getBlocks()) {
-						CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
-						if (v.getOrientation() == Orientation.antiClockwise) {
-							range.setY(-range.getY());
-						}
-						can.getGraphicsContext2D().fillOval(range.getX() + (mapPane.getWidth()/2), range.getY() + (mapPane.getHeight()/2),5,5);
-						arrPos++;
-					}
-					arrPos = 0;
-				}
-			}
-	}
-
-	private void drawMap() {
+		can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
 		int arrPos = 0;
 		for(ReturnSet r : m.getBlockages()) {
 			for (LReturn l: r.getBlockages()) {
-				System.out.println(l.getBlocks());
-				
+				for(Integer i : l.getBlocks()) {
+					CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
+					if (v.getOrientation() == Orientation.antiClockwise) {
+						range.setY(-range.getY());
+					}
+					if(i!=0) {
+						can.getGraphicsContext2D().fillOval(range.getX() + (mapPane.getWidth()/2), range.getY() + (mapPane.getHeight()/2),5,5);
+					}
+					arrPos++;
+				}
+				arrPos = 0;
+			}
+		}
+	}
+
+	private void drawMap() {
+		can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
+		int arrPos = 0;
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
+				for(Integer i : l.getBlocks()) {
+					CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
+					if (v.getOrientation() == Orientation.antiClockwise) {
+						range.setY(-range.getY());
+					}
+					if(i!=0) {
+						can.getGraphicsContext2D().fillOval(range.getX() + (mapPane.getWidth()/2), range.getY() + (mapPane.getHeight()/2),5,5);
+					}
+					arrPos++;
+				}
+				arrPos = 0;
+			}
+		}
+
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
+
 				can.getGraphicsContext2D().setFill(Color.CRIMSON);
 				CartesianPair start = new CartesianPair(new Waypoint(l.getStart(), l.getStartDist()));
 				if (v.getOrientation() == Orientation.antiClockwise) {
 					start.setY(-start.getY());
 				}
 				can.getGraphicsContext2D().fillOval(start.getX() + (mapPane.getWidth()/2), start.getY() + (mapPane.getHeight()/2), 10 , 10);
-				
+
 				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
 				CartesianPair end = new CartesianPair(new Waypoint(l.getEnd(), l.getEndDist())); 
 				if(v.getOrientation() == Orientation.antiClockwise) {
 					end.setY(-end.getY());
 				}
-				can.getGraphicsContext2D().fillOval(can.getWidth()/2 + end.getX(), can.getHeight()/2 + end.getY(),10 , 10);
-				
-				can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
-				for(Integer i : l.getBlocks()) {
-					CartesianPair block = new CartesianPair(new Waypoint(l.getStart() + arrPos, i));
-					if (v.getOrientation() == Orientation.antiClockwise) {
-						block.setY(-block.getY());
-					}
-					can.getGraphicsContext2D().fillOval(can.getWidth()/2 + block.getX(), can.getHeight()/2 + block.getY(),5 , 5);
-					arrPos++;
-				}
-				arrPos = 0;
+				can.getGraphicsContext2D().fillOval(mapPane.getWidth()/2 + end.getX(), mapPane.getHeight()/2 + end.getY(),10 , 10);
 			}
 		}
 	}
