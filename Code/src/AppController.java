@@ -188,7 +188,7 @@ public class AppController {
 	private void drawPath() {
 		CartesianPair pathXY = new CartesianPair(pa.getPath().get(0));
 		can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
-		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2, mapPane.getHeight()/2, pathXY.getX() + mapPane.getWidth()/2, pathXY.getY() + mapPane.getHeight()/2);
+		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2, mapPane.getHeight()/2, pathXY.getX() + mapPane.getWidth()/2, -pathXY.getY() + mapPane.getHeight()/2);
 	}
 
 	private void drawSense() {
