@@ -51,7 +51,6 @@ public class Processor {
 		theResultSet = new ReturnSet(theSensor.getOrientation());
 		theResultSet = scanEnvironment(theResultSet);
 		theResultSet = merge(theResultSet);
-		//		theResultSet = blockageAmalgamation(theResultSet);
 		theMap.addScan(theResultSet);
 	}
 
@@ -92,9 +91,7 @@ public class Processor {
 				cosRule = 0.0;
 			}
 		}
-		//Cosrule for last item
 		int angle = (orig.getBlockages().get(0).getStart() + 360) - orig.getBlockages().get(orig.getBlockages().size()-1).getEnd(); //Difference in angles
-		//if cosrule using angle and the start/end dist of first and last item is less, then merge those items		
 		if (changed == false) {
 			r = orig;
 		}

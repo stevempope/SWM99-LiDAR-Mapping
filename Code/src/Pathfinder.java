@@ -26,7 +26,7 @@ public class Pathfinder {
 	public Pathfinder() {
 		thePath = new Path();
 	}
-	
+
 	/**
 	 * Our pathfinding algorithm
 	 * Currently, if the environment is empty (no blockages in range), then we move
@@ -41,12 +41,10 @@ public class Pathfinder {
 	 * @return - The calculated path
 	 */
 	public Path pathfind(Map theMap, Waypoint destination) {
+		thePath.clearPath();
 		best = new Waypoint(0,200000000);
-		if (theMap.getBlockages().isEmpty() || lineOfSight(destination, theMap) == true) {
-			thePath.addWaypoint(destination);
-		}
-		else {
-			thePath.clearPath();
+		thePath.addWaypoint(destination);
+		if (lineOfSight(destination, theMap) == false) {
 			for (ReturnSet r: theMap.getBlockages()) {
 				for(LReturn l: r.getBlockages()) {
 					l.setStartScore(l.getStartDist() + cosRule(l.getStart(), l.getStartDist(), destination));
@@ -54,39 +52,45 @@ public class Pathfinder {
 					if(l.getStartScore() <= best.getDistance()) {
 						best.setAngle(l.getStart());
 						best.setDistance(l.getStartDist());
+						System.out.printf("%d , %d \n", best.getAngle(), best.getDistance());
 					}
 					if(l.getEndScore() <= best.getDistance()) {
 						best.setAngle(l.getEnd());
 						best.setDistance(l.getEndDist());
+						System.out.printf("%d , %d \n", best.getAngle(), best.getDistance());
 					}
 				}
 			}
-			thePath.addWaypoint(best);
-			thePath.addWaypoint(destination);
+			thePath.insertIntoPath(0, best);
 		}
-		System.out.printf("angle = %s, distance = %d \n",thePath.getPath().get(0).getAngle(), thePath.getPath().get(0).getDistance());
+		for(Waypoint w : thePath.getPath()) {
+			System.out.printf("%d , %d \n", w.getAngle(), w.getDistance());
+		}
 		return thePath;
 	}
 
 	private boolean lineOfSight(Waypoint destination, Map theMap) {
 		System.out.println("LOS TEST");
-		for (ReturnSet s : theMap.getBlockages()) {
-			for(LReturn m : s.getBlockages()) {
-				if (m.getStart() < destination.getAngle() && m.getEnd() > destination.getAngle()){
-					if(m.getDistance(destination.getAngle() - m.getStart()) >= destination.getDistance()) {
-						return true;
+		boolean los = true;
+		for (ReturnSet r : theMap.getBlockages()) {
+			for(LReturn l : r.getBlockages()) {
+				if (l.getStart() < destination.getAngle() && l.getEnd() > destination.getAngle()){
+					if(l.getDistance(destination.getAngle()-l.getStart()) < destination.getDistance()) {
+						los = false;
 					}
 				}
 			}
 		}
-		return false;
+		System.out.println(los);
+		return los;
 	}
 	
-	private double cosRule(Integer start, Integer startDist, Waypoint destination) {
-		Integer a = startDist;
-		Integer c = destination.getDistance();
-		double b = Math.toRadians(Math.abs(start - destination.getAngle()));
-		return Math.sqrt((a*a + c*c) - 2*a*c*(Math.cos(b)));
+	private double cosRule(Integer angle, Integer distance, Waypoint dest) {
+		int a =  distance;
+		int c = dest.getDistance();
+		int A = Math.abs(dest.getAngle()-angle);
+		double b = ((a*a)+(c*c))-((2*a*c)*(Math.cos(Math.toRadians(A))));
+		b = Math.sqrt(b);
+		return b;
 	}
-
 }

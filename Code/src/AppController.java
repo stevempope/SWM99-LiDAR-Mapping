@@ -108,7 +108,6 @@ public class AppController {
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
 		pr.updateMap(m);
-		System.out.println(m.getBlockages().get(0).getBlockages().size());
 		paint();
 		System.out.print(event.getSource());
 	}
@@ -116,7 +115,6 @@ public class AppController {
 
 	@FXML protected void handleMediumSense(ActionEvent event) {
 		pr.smarterUpdateMap(m);
-		System.out.println(m.getBlockages().get(0).getBlockages().size());
 		paint();
 		System.out.print(event.getSource());
 	}
