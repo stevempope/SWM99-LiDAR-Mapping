@@ -43,22 +43,41 @@ public class Pathfinder {
 	public Path pathfind(Map theMap, Waypoint destination) {
 		thePath.clearPath();
 		best = new Waypoint(0,200000000);
+		double bestScore = best.getDistance();
 		thePath.addWaypoint(destination);
 		if (lineOfSight(destination, theMap) == false) {
+			CartesianPair dest = new CartesianPair(destination);
+			CartesianPair startOffset = new CartesianPair();
+			CartesianPair endOffset = new CartesianPair();
 			for (ReturnSet r: theMap.getBlockages()) {
 				for(LReturn l: r.getBlockages()) {
-					l.setStartScore(l.getStartDist() + cosRule(l.getStart(), l.getStartDist(), destination));
-					l.setEndScore(l.getEndDist() + cosRule(l.getEnd(), l.getEndDist(), destination));
-					if(l.getStartScore() <= best.getDistance()) {
+					CartesianPair startNode = new CartesianPair(new Waypoint (l.getStart(), l.getStartDist()));
+					startOffset.setX(startNode.getX()-dest.getX());
+					startOffset.setY(startNode.getY()-dest.getY());
+					CartesianPair endNode = new CartesianPair(new Waypoint (l.getEnd(), l.getEndDist()));
+					endOffset.setX(endNode.getX()-dest.getX());
+					endOffset.setY(endNode.getY()-dest.getY());
+					l.setStartScore(Math.sqrt((startOffset.getX() * startOffset.getX())+ (startOffset.getY() * startOffset.getY())));
+					System.out.printf("Start Score: Root  %f squared + %f squared  = %f \n", startOffset.getX(), startOffset.getY(), l.getStartScore());
+					l.setEndScore(Math.sqrt((endOffset.getX() * endOffset.getX())+ (endOffset.getY() * endOffset.getY())));
+					System.out.printf("End Score: Root  %f squared + %f squared  = %f \n", endOffset.getX(), endOffset.getY(), l.getEndScore());
+					if(l.getStartScore() <= bestScore) {
 						best.setAngle(l.getStart());
 						best.setDistance(l.getStartDist());
+						bestScore = l.getStartScore();
 						System.out.printf("%d , %d \n", best.getAngle(), best.getDistance());
 					}
-					if(l.getEndScore() <= best.getDistance()) {
+					if(l.getEndScore() <= bestScore) {
 						best.setAngle(l.getEnd());
 						best.setDistance(l.getEndDist());
+						bestScore = l.getEndScore();
 						System.out.printf("%d , %d \n", best.getAngle(), best.getDistance());
 					}
+					startOffset.setX(0.0);
+					startOffset.setY(0.0);
+					endOffset.setX(0.0);
+					endOffset.setY(0.0);
+					System.out.println("Pass");
 				}
 			}
 			thePath.insertIntoPath(0, best);
@@ -84,7 +103,7 @@ public class Pathfinder {
 		System.out.println(los);
 		return los;
 	}
-	
+
 	private double cosRule(Integer angle, Integer distance, Waypoint dest) {
 		int a =  distance;
 		int c = dest.getDistance();
