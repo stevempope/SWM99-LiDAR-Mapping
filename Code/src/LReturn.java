@@ -165,12 +165,12 @@ public class LReturn {
 	public void appendBlocks(ArrayList<Integer> blocks){
 		returnList.addAll(blocks);
 	}
-	
+		
 	public ArrayList<Integer> getBlocks(){
 		return returnList;
 	}
 
 	public void insertZero() {
-		returnList.add(0, 0);
+		returnList.add(0,0);
 	}
 }

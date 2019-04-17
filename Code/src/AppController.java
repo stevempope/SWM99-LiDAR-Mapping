@@ -9,7 +9,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 public class AppController {
 
-	private App view;
 	private VLsensor v;
 	private Map m;
 	private Processor pr;
@@ -19,26 +18,21 @@ public class AppController {
 	private int angle;
 	private Agent theAgent;
 	private boolean lidarToggle;
-	private boolean agentToggle;
 	private boolean destinationToggle;
 	private boolean pathToggle;
-	private Integer [] tempSense;
-	private boolean hasMap;
 	private double lastX;
 	private double lastY;
+	private boolean mapToggle;
 
 	public AppController() {		
-		view = new App();
-		v = new VLsensor(Orientation.antiClockwise);
+		v = new VLsensor();
 		m = new Map();
 		pf = new Pathfinder();
 		pa = new Path();
 		dest = new Waypoint(0,0);
 		theAgent = new Agent();
 		lidarToggle = false;
-		agentToggle = false;
 		destinationToggle = false;
-		hasMap = false;
 	}
 
 	/*
@@ -78,21 +72,18 @@ public class AppController {
 		System.out.printf("Canvas height: %f, Canvas width: %f\n", mapPane.getHeight(), mapPane.getWidth());
 		System.out.printf("Click! X = %f Y = %f \n",event.getX(), event.getY());
 		angle = (int)Math.toDegrees(Math.atan2(Math.abs(mapPane.getHeight()/2) - event.getY(), Math.abs((mapPane.getWidth()/2) - event.getX())));
-		angle = (angle + theAgent.getPosition().getAngle()) %360;
 		if (event.getX() < can.getWidth()/2) {
 			if (event.getY() < can.getHeight()) {
-				dest.setAngle(Math.abs(angle - 180));
+				angle = Math.abs(angle - 180);
 			}
 			else {
-				dest.setAngle(Math.abs(angle + 180));
+				angle = Math.abs(angle + 180);
 			}
 		}
 		else if (event.getY() > can.getHeight()/2){
-			dest.setAngle(Math.abs(angle + 360));
+			angle = Math.abs(angle + 360);
 		}
-		else {
-			dest.setAngle(angle);
-		}
+		dest.setAngle((angle + theAgent.getPosition().getAngle()) % 360);
 		System.out.printf("%d\n", dest.getAngle());
 		dest.setDistance ((int)(Math.sqrt(Math.abs(((can.getHeight()/2) - event.getY()) * ((can.getHeight()/2) - event.getY())) + Math.abs(((can.getWidth()/2) - event.getX()) * ((can.getWidth()/2) - event.getX())))));
 		System.out.println(dest.getDistance().toString());
@@ -105,7 +96,6 @@ public class AppController {
 		if(dest != null && m.getBlockages().size() > 0) {
 			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
 			pa = pf.pathfind(m, dest);
-			hasMap = true;
 			paint();
 		}
 		else {
@@ -115,38 +105,6 @@ public class AppController {
 
 	}
 
-	@FXML public void handleDrive(ActionEvent event) {
-		if (dest.getAngle() != 0 && dest.getDistance() != 0) {
-			if (tempSense !=  null) {
-				if(pa.getPath().size() > 0) {
-					Waypoint next = pa.popNextWaypoint();
-					theAgent.setPosition(next);
-					paint();
-				}
-				else {
-					System.out.printf("Please use pathfind to generate a Path! \n");
-				}
-			}
-			else {
-				System.out.printf("Please call for a read from the LiDAR sensor \n");
-			}
-		}
-		else {
-			System.out.printf("Please select a Destination! \n");
-		}
-	}
-
-	@FXML protected void handleCompleteRun(ActionEvent event) {
-		//TODO must write ReturnSet Amalgamate
-		paint();
-		System.out.print(event.getSource());
-	}
-
-	@FXML protected void handleAlgorithmChange(ActionEvent event) {
-		//TODO Need to write more than 1 or deprecate
-		paint();
-		System.out.print(event.getSource());
-	}
 
 	@FXML protected void handleBasicSense(ActionEvent event) {
 		pr.updateMap(m);
@@ -172,7 +130,7 @@ public class AppController {
 	}
 
 	@FXML private void handleAgentToggle() {
-		agentToggle = !agentToggle;
+		theAgent.setVisibility(!theAgent.isVisible());
 		paint();
 	}
 
@@ -186,12 +144,17 @@ public class AppController {
 		paint();
 	}
 
+	@FXML private void handleObjectToggle() {
+		mapToggle = !mapToggle;
+		paint();
+	}
+
 	/*
 	 * Draw methods
 	 */
 	private void paint() {
 		can.getGraphicsContext2D().clearRect(0, 0, can.getWidth(), can.getHeight());
-		if (agentToggle) {
+		if (theAgent.isVisible()) {
 			drawAgent();
 		}
 		if (destinationToggle) {
@@ -203,17 +166,14 @@ public class AppController {
 		if (lidarToggle) {
 			drawSense();
 		}
-		if(hasMap) {
+		if (mapToggle) {
 			drawMap();
-			//Must add a toggle for this layer!
 		}
-		//Paint depending on the values
 	}
 
 	private void drawAgent() {
-		CartesianPair agentPos = new CartesianPair(theAgent.getPosition());
 		can.getGraphicsContext2D().setFill(Color.DARKCYAN);
-		can.getGraphicsContext2D().fillRect(agentPos.getX() + (mapPane.getWidth()/2), agentPos.getY() + (mapPane.getHeight()/2), theAgent.getSize(), theAgent.getSize());
+		can.getGraphicsContext2D().fillRect(mapPane.getWidth()/2 - theAgent.getSize()/2, mapPane.getHeight()/2 - theAgent.getSize()/2, theAgent.getSize(), theAgent.getSize());
 	}
 
 	private void drawDest() {
@@ -224,56 +184,67 @@ public class AppController {
 	}
 
 	private void drawPath() {
+		CartesianPair pathXY = new CartesianPair(pa.getPath().get(0));
 		can.getGraphicsContext2D().setFill(Color.DARKGOLDENROD);
-		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2,mapPane.getHeight()/2 , getX(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()), getY(pa.getPath().get(0).getAngle(),pa.getPath().get(0).getDistance()));
-		//TODO refactor to agent position and for multiple waypoints in a path
+		can.getGraphicsContext2D().strokeLine(mapPane.getWidth()/2, mapPane.getHeight()/2, pathXY.getX() + mapPane.getWidth()/2, -pathXY.getY() + mapPane.getHeight()/2);
 	}
 
 	private void drawSense() {
-			can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
-			int arrPos = 0;
-			for(ReturnSet r : m.getBlockages()) {
-				for (LReturn l: r.getBlockages()) {
-					for(Integer i : l.getBlocks()) {
-						can.getGraphicsContext2D().fillOval(getX((arrPos + l.getStart()),i), getY((arrPos + l.getStart()),i),5,5);
-						arrPos++;
-					}
-				}
-			}
-
-	}
-
-	private void drawMap() {
+		can.getGraphicsContext2D().setFill(Color.CORNFLOWERBLUE);
 		int arrPos = 0;
 		for(ReturnSet r : m.getBlockages()) {
 			for (LReturn l: r.getBlockages()) {
-				System.out.println(l.getBlocks());
-				can.getGraphicsContext2D().setFill(Color.CRIMSON);
-				can.getGraphicsContext2D().fillOval(getX(l.getStart(), l.getStartDist()), getY(l.getStart(), l.getStartDist()),10 , 10);
-				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
-				can.getGraphicsContext2D().fillOval(getX(l.getEnd(), l.getEndDist()), getY(l.getEnd(), l.getEndDist()),10 , 10);
-				can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
 				for(Integer i : l.getBlocks()) {
-					can.getGraphicsContext2D().fillOval(getX((arrPos + l.getStart()),i), getY((arrPos + l.getStart()),i),5,5);
+					CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
+					if (v.getOrientation() == Orientation.antiClockwise) {
+						range.setY(-range.getY());
+					}
+					if(i!=0) {
+						can.getGraphicsContext2D().fillOval(range.getX() + (mapPane.getWidth()/2), range.getY() + (mapPane.getHeight()/2),5,5);
+					}
 					arrPos++;
 				}
+				arrPos = 0;
 			}
 		}
 	}
 
-	/*
-	 * To be deprecated if possible
-	 */
-
-	private double getY(int angle, int dist) {
-		if (v.getOrientation() == Orientation.antiClockwise) {
-			return (-dist * (Math.sin(Math.toRadians(angle)))) + mapPane.getHeight()/2;
+	private void drawMap() {
+		can.getGraphicsContext2D().setFill(Color.DARKOLIVEGREEN);
+		int arrPos = 0;
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
+				for(Integer i : l.getBlocks()) {
+					CartesianPair range = new CartesianPair(new Waypoint(l.getStart()+arrPos,i));
+					if (v.getOrientation() == Orientation.antiClockwise) {
+						range.setY(-range.getY());
+					}
+					if(i!=0) {
+						can.getGraphicsContext2D().fillOval(range.getX() + (mapPane.getWidth()/2), range.getY() + (mapPane.getHeight()/2),5,5);
+					}
+					arrPos++;
+				}
+				arrPos = 0;
+			}
 		}
-		else return (dist * (Math.sin(Math.toRadians(angle)))) + mapPane.getHeight()/2;
-	}
 
-	private double getX(int angle, int dist) {
-		return (dist * (Math.cos(Math.toRadians(angle)))) + mapPane.getWidth()/2;
-	}
+		for(ReturnSet r : m.getBlockages()) {
+			for (LReturn l: r.getBlockages()) {
 
+				can.getGraphicsContext2D().setFill(Color.CRIMSON);
+				CartesianPair start = new CartesianPair(new Waypoint(l.getStart(), l.getStartDist()));
+				if (v.getOrientation() == Orientation.antiClockwise) {
+					start.setY(-start.getY());
+				}
+				can.getGraphicsContext2D().fillOval(start.getX() + (mapPane.getWidth()/2), start.getY() + (mapPane.getHeight()/2), 10 , 10);
+
+				can.getGraphicsContext2D().setFill(Color.BLUEVIOLET);
+				CartesianPair end = new CartesianPair(new Waypoint(l.getEnd(), l.getEndDist())); 
+				if(v.getOrientation() == Orientation.antiClockwise) {
+					end.setY(-end.getY());
+				}
+				can.getGraphicsContext2D().fillOval(mapPane.getWidth()/2 + end.getX(), mapPane.getHeight()/2 + end.getY(),10 , 10);
+			}
+		}
+	}
 }
