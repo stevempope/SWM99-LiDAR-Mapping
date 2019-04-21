@@ -103,13 +103,4 @@ public class Pathfinder {
 		System.out.println(los);
 		return los;
 	}
-
-	private double cosRule(Integer angle, Integer distance, Waypoint dest) {
-		int a =  distance;
-		int c = dest.getDistance();
-		int A = Math.abs(dest.getAngle()-angle);
-		double b = ((a*a)+(c*c))-((2*a*c)*(Math.cos(Math.toRadians(A))));
-		b = Math.sqrt(b);
-		return b;
-	}
 }
