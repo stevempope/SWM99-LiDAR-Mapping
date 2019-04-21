@@ -93,15 +93,20 @@ public class AppController {
 	}
 
 	@FXML protected void handlePathfind(ActionEvent event) {
+		long start = 0;
+		long duration = 0;
 		if(dest != null && m.getBlockages().size() > 0) {
 			System.out.printf(" Dest = %d, %d \n", dest.getAngle(), dest.getDistance());
+			start = System.nanoTime();
 			pa = pf.pathfind(m, dest);
+			duration = System.nanoTime()-start;
 			paint();
 		}
 		else {
 			System.out.println("Please select a destination by clicking the Map and ensure you have called for data from the LiDAR sensor!");
 		}
-		System.out.print(event.getSource());
+		//System.out.print(event.getSource());
+		System.out.println(duration);
 
 	}
 
